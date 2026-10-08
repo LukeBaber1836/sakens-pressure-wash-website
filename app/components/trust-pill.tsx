@@ -48,7 +48,7 @@ export function TrustPill() {
         variants={pill}
         initial="hidden"
         animate="show"
-        className="glass relative flex w-fit flex-wrap items-center gap-x-8 gap-y-3 rounded-[28px] px-4 py-4 text-brand-foreground [--glass-opacity:0.7] sm:px-8 sm:py-5"
+        className="glass relative flex w-full flex-wrap items-center gap-x-8 gap-y-3 rounded-[28px] px-4 py-4 text-brand-foreground [--glass-opacity:0.7] sm:px-8 sm:py-5 md:w-fit"
       >
         <motion.div variants={fadeUp} className="flex items-center gap-3">
           <motion.span
@@ -64,7 +64,7 @@ export function TrustPill() {
             ))}
           </motion.span>
           <span className="text-base font-bold">
-            5.0 on Google <span className="font-medium text-brand-foreground/60">([##] reviews)</span>
+            5.0 on Google <span className="font-medium text-brand-foreground/60">(132 reviews)</span>
           </span>
         </motion.div>
         {trustItems.map(({ label, icon: Icon }) => (

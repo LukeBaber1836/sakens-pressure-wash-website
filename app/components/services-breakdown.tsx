@@ -1,4 +1,4 @@
-import { ServicesHouse } from "./services-house";
+import { ServicesExplorer } from "./services-explorer";
 
 export function ServicesBreakdown() {
   return (
@@ -13,8 +13,8 @@ export function ServicesBreakdown() {
         </p>
       </div>
 
-      <div className="mt-8 sm:mt-12">
-        <ServicesHouse />
+      <div className="mt-6 sm:mt-8">
+        <ServicesExplorer />
       </div>
     </section>
   );

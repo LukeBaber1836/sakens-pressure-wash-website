@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, MotionConfig, useMotionValueEvent, useScroll } from "motion/react";
 import { TbArrowUpRight } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { SiteLogo } from "./site-logo";
 
 const navLinks = [
   { label: "Services", href: "/#services" },
@@ -54,13 +54,11 @@ export function SiteNav() {
 
             <motion.div layout className="relative shrink-0">
               <Link href="/" aria-label="Saken's Pressure Washing home">
-                <Image
-                  src="/logos/logo_horizontal.png"
-                  alt="Saken's Pressure Washing"
-                  width={1458}
-                  height={455}
-                  priority
-                  className={cn("w-auto", detached ? "h-10" : "h-14")}
+                {/* On phones the floating pill only has room for the shield beside the button. */}
+                <SiteLogo
+                  preload
+                  className={detached ? "text-[15px] sm:text-[17px]" : "text-[17px] sm:text-[22px]"}
+                  wordmarkClassName={cn(detached && "max-sm:hidden")}
                 />
               </Link>
             </motion.div>

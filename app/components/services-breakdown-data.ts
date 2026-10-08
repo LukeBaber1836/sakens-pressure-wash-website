@@ -1,13 +1,13 @@
-export type HouseService = {
+export type ServiceHotspot = {
   id: string;
   name: string;
   description: string;
-  /** Hotspot position as a percentage of the house image's width and height. */
+  /** Hotspot position as a percentage of the scene image's width and height. */
   x: number;
   y: number;
 };
 
-export const houseServices: HouseService[] = [
+export const houseServices: ServiceHotspot[] = [
   {
     id: "roof",
     name: "Roof cleaning",
@@ -65,9 +65,51 @@ export const houseServices: HouseService[] = [
   {
     id: "sidewalk",
     name: "Sidewalk & walkway cleaning",
-    description:
-      "Walkways and sidewalks cleaned edge to edge, removing grime and slippery algae.",
+    description: "Walkways and sidewalks cleaned edge to edge, removing grime and slippery algae.",
     x: 17,
     y: 72,
+  },
+];
+
+export const commercialServices: ServiceHotspot[] = [
+  {
+    id: "building",
+    name: "Commercial building washing",
+    description:
+      "Storefronts, brick, stucco, and awnings cleaned so your building looks open for business.",
+    x: 47.5,
+    y: 31,
+  },
+  {
+    id: "gas-station",
+    name: "Gas station maintenance",
+    description:
+      "Pump islands, canopy columns, and bollards degreased and brightened for a cleaner stop.",
+    x: 36.6,
+    y: 62.5,
+  },
+  {
+    id: "parking-lot",
+    name: "Parking lot cleaning",
+    description:
+      "Oil stains, gum, and tire marks lifted from lots and curbs so the stripes stand out again.",
+    x: 55.4,
+    y: 55.4,
+  },
+  {
+    id: "post-construction",
+    name: "Post-construction cleanup",
+    description:
+      "Dust, mortar, paint overspray, and debris washed off new builds before opening day.",
+    x: 71.2,
+    y: 51.5,
+  },
+  {
+    id: "dumpster-pad",
+    name: "Dumpster pad cleaning",
+    description:
+      "Grease, spills, and odors washed out of dumpster pads and enclosures to keep pests away.",
+    x: 88.5,
+    y: 49,
   },
 ];
