@@ -37,10 +37,10 @@ export function SiteNav() {
         >
           <motion.div
             layout
-            style={{ borderRadius: 28 }}
+            style={{ borderRadius: 32 }}
             className={cn(
               "pointer-events-auto relative flex items-center",
-              detached ? "gap-6 py-1.5 pr-1.5 pl-5" : "w-full justify-between"
+              detached ? "gap-6 py-2.5 pr-2.5 pl-6 sm:gap-10" : "w-full justify-between"
             )}
           >
             <motion.div
@@ -48,8 +48,8 @@ export function SiteNav() {
               aria-hidden="true"
               initial={false}
               animate={{ opacity: detached ? 1 : 0 }}
-              style={{ borderRadius: 28 }}
-              className="glass absolute inset-0 [--glass-opacity:0.7]"
+              style={{ borderRadius: 32 }}
+              className="glass absolute inset-0 [--glass-opacity:0.82]"
             />
 
             <motion.div layout className="relative shrink-0">
