@@ -3,6 +3,7 @@
 import { Fragment } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "motion/react";
+import { TiltedAccent } from "./tilted-accent";
 
 const verse = "So whether you eat or drink or whatever you do,";
 const verseHighlight = "do it all for the glory of God";
@@ -70,14 +71,17 @@ export function MissionStatement() {
           </footer>
         </motion.blockquote>
 
-        <Image
-          src="/images/cross_image.png"
-          alt="A wooden cross silhouetted against the sun above a hillside fence, with mountains in the distance"
-          width={1280}
-          height={853}
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          className="h-auto w-full rounded-[24px] shadow-[0_18px_40px_-12px_rgba(1,20,45,0.6)]"
-        />
+        <div className="relative">
+          <TiltedAccent className="rounded-[24px]" />
+          <Image
+            src="/images/cross_image.png"
+            alt="A wooden cross silhouetted against the sun above a hillside fence, with mountains in the distance"
+            width={1280}
+            height={853}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="relative h-auto w-full rounded-[24px] shadow-[0_18px_40px_-12px_rgba(1,20,45,0.6)]"
+          />
+        </div>
       </div>
     </section>
   );

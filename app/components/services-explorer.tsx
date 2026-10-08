@@ -130,7 +130,7 @@ export function ServicesExplorer() {
                 exit={{ opacity: 0, transition: { duration: 0.15 } }}
                 className="hidden lg:block"
               >
-                <DoodleCallout>
+                <DoodleCallout delay={2}>
                   We do commercial
                   <br />
                   projects too!
@@ -149,7 +149,7 @@ export function ServicesExplorer() {
         // The drawings start with ~8% of their width as blank sky; pull that up behind the toggle.
         className="-mt-4 sm:-mt-8 lg:-mt-12"
       >
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
           <motion.div
             key={type}
             initial={{ opacity: 0 }}

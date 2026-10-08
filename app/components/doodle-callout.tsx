@@ -39,9 +39,12 @@ const label: Variants = {
 export function DoodleCallout({
   children,
   className,
+  delay = 0,
 }: {
   children: ReactNode;
   className?: string;
+  /** Seconds to wait after it scrolls into view before drawing. */
+  delay?: number;
 }) {
   // Skip the draw-in for reduced motion; the doodle just appears.
   const reduced = useReducedMotion();
@@ -67,13 +70,13 @@ export function DoodleCallout({
         className="absolute overflow-visible"
         style={{ left: -ARROW_TIP.x, top: -ARROW_TIP.y }}
       >
-        <motion.path d={ARROW_PATH} variants={draw} custom={0} />
-        <motion.path d={ARROW_HEAD} variants={draw} custom={0.75} />
+        <motion.path d={ARROW_PATH} variants={draw} custom={delay} />
+        <motion.path d={ARROW_HEAD} variants={draw} custom={delay + 0.75} />
       </svg>
 
       <motion.p
         variants={label}
-        custom={0.4}
+        custom={delay + 0.4}
         className="absolute top-[-31px] left-[128px] w-max font-hand text-[26px] leading-[0.95] text-brand"
       >
         {children}
