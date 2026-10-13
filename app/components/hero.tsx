@@ -1,25 +1,57 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { FreshOnShow } from "./fresh-on-show";
+import { HERO_INTRO, shouldPlayHeroIntro } from "./hero-intro";
 import { NotchedCard } from "./notched-card";
 import { TrustPill } from "./trust-pill";
 
-// Fades up once the card reveals; each line passes its own delay.
+// Fades up once the intro frame has mostly settled; each line passes its own delay.
 const entrance =
-  "translate-y-3 opacity-0 transition duration-700 ease-out group-data-ready/notch:translate-y-0 group-data-ready/notch:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none";
+  "translate-y-3 opacity-0 transition duration-700 ease-out group-data-settled/hero:translate-y-0 group-data-settled/hero:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none";
 
+/** The homepage hero. Its intro plays every time the homepage is shown, not just on first load. */
 export function Hero() {
   return (
-    <section id="top" className="site-container shrink-0 grow pt-2 [--site-max:125rem]">
+    <FreshOnShow>
+      <HeroCard />
+    </FreshOnShow>
+  );
+}
+
+function HeroCard() {
+  const [settled, setSettled] = useState(false);
+  const [pillOpen, setPillOpen] = useState(false);
+
+  // Intro: the card holds still in its frame while the copy fades up and the trust pill rises.
+  useEffect(() => {
+    const reduced = !shouldPlayHeroIntro();
+    const timers = [
+      setTimeout(() => setSettled(true), reduced ? 0 : HERO_INTRO.copyAt),
+      setTimeout(() => setPillOpen(true), reduced ? 0 : HERO_INTRO.pillAt),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <section
+      id="top"
+      data-settled={settled || undefined}
+      className="group/hero site-container shrink-0 grow pt-2 [--site-max:125rem]"
+    >
       <NotchedCard
-        notch={<TrustPill />}
+        notchOpen={pillOpen}
+        notch={<TrustPill show={pillOpen} />}
         // Fill the viewport below the 5rem nav, leaving 1rem under the card; floor it for short screens.
         className="relative flex h-[calc(100svh-6.5rem)] min-h-[600px] flex-col rounded-[28px] bg-[#0b2440] sm:min-h-[520px]"
       >
         {/* The video's first frame, preloaded, showing through until the video can play. */}
         <Image
-          src="/images/hero-poster.webp"
+          src="/images/hero-video-poster.webp"
           alt=""
           fill
           preload
@@ -28,7 +60,7 @@ export function Hero() {
         />
         <video
           className="absolute inset-0 h-full w-full object-cover"
-          src="/videos/roof_360.webm"
+          src="/videos/hero_video.webm"
           autoPlay
           muted
           loop
@@ -41,7 +73,7 @@ export function Hero() {
           <h1
             className={cn(
               entrance,
-              "delay-150 text-5xl leading-[1.02] font-extrabold tracking-[-0.025em] sm:w-[711px] sm:max-w-[calc(100vw-8rem)] sm:text-[55px]"
+              "delay-150 text-5xl leading-[1.02] font-extrabold tracking-[-0.025em] sm:w-[711px] sm:max-w-[calc(100vw-8rem)] sm:text-[55px]",
             )}
           >
             Pressure washing and soft washing in East TX
@@ -64,7 +96,7 @@ export function Hero() {
             href="tel:9035398960"
             className={cn(
               entrance,
-              "text-base font-semibold text-white underline-offset-4 delay-450 hover:underline"
+              "text-base font-semibold text-white underline-offset-4 delay-450 hover:underline",
             )}
           >
             Prefer to talk? Call (903) 539-8960

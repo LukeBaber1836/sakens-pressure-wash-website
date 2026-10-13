@@ -8,8 +8,7 @@ export function ServicesBreakdown() {
           Services Breakdown
         </h2>
         <p className="text-[17px] leading-relaxed text-foreground/80">
-          From the roof down to the sidewalk, Saken cleans every part of your property. Hover or
-          tap a dot to see what&apos;s included.
+          Hover or tap a dot to see what&apos;s included.
         </p>
       </div>
 

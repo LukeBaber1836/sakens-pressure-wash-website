@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, MotionConfig, type Variants } from "motion/react";
 import { TbShieldCheckFilled } from "react-icons/tb";
+import { cn } from "@/lib/utils";
 import { TiltedAccent } from "./tilted-accent";
 
 const fadeUp: Variants = {
@@ -27,16 +28,29 @@ const credentials = [
   { label: "Fully insured", badge: null },
 ];
 
-export function MeetTheOwner() {
+/**
+ * `lead` makes this the page's opening section: white instead of gray, no gap above it, and the
+ * heading becomes the h1. It also drops its bottom padding, since the next white section brings its own.
+ */
+export function MeetTheOwner({ lead = false }: { lead?: boolean }) {
+  const Heading = lead ? motion.h1 : motion.h2;
+
   return (
     <MotionConfig reducedMotion="user">
-      <section id="about" aria-labelledby="about-heading" className="mt-20 bg-secondary sm:mt-26">
+      <section
+        id="about"
+        aria-labelledby="about-heading"
+        className={cn(!lead && "mt-20 bg-secondary sm:mt-26")}
+      >
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.25 }}
-          className="site-container grid items-center gap-16 py-20 sm:py-26 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20"
+          className={cn(
+            "site-container grid items-center gap-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20",
+            lead ? "pt-10 sm:pt-14" : "py-20 sm:py-26"
+          )}
         >
           <motion.figure
             variants={fadeUp}
@@ -61,13 +75,13 @@ export function MeetTheOwner() {
             >
               Meet the owner
             </motion.p>
-            <motion.h2
+            <Heading
               variants={fadeUp}
               id="about-heading"
               className="mt-3 text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
             >
               A Tyler native who does the job right
-            </motion.h2>
+            </Heading>
             <motion.div
               variants={fadeUp}
               className="mt-5 flex max-w-xl flex-col gap-4 text-[17px] leading-relaxed text-foreground/80"

@@ -15,9 +15,9 @@ const linkGroups = [
     title: "Pages",
     links: [
       { label: "All services", href: "/#services" },
-      { label: "Our work", href: "/#work" },
+      { label: "Our work", href: "/work" },
       { label: "Reviews", href: "/#reviews" },
-      { label: "About", href: "/#about" },
+      { label: "About", href: "/about" },
     ],
   },
   {
@@ -111,17 +111,7 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        {/* Oversized wordmark, sized off the container's width so it always spans one line, then
-            stretched taller from its baseline. Its tops fade out to nothing, so they can reach up toward
-            the columns without ever touching them. Extra line height keeps the descenders inside the
-            box that the gradient is clipped to. */}
-        <div aria-hidden="true" className="@container pointer-events-none mt-6 select-none sm:mt-10">
-          <p className="-mb-[0.1em] origin-bottom scale-y-[1.35] bg-linear-to-b from-transparent from-15% via-brand-foreground/[0.05] via-50% to-brand-foreground/[0.14] to-90% bg-clip-text text-center font-heading text-[8.4cqw] leading-[1.25] font-extrabold tracking-[-0.04em] whitespace-nowrap text-transparent">
-            Saken&rsquo;s Pressure Washing
-          </p>
-        </div>
-
-        <p className="mt-6 text-center text-sm text-foreground/40">
+        <p className="mt-12 text-center sm:mt-16 text-sm text-foreground/40">
           © <CopyrightYear /> Saken&apos;s Pressure Washing LLC. All rights reserved.
         </p>
       </div>

@@ -41,13 +41,14 @@ const star: Variants = {
   },
 };
 
-export function TrustPill() {
+/** Google rating plus trust points. Its contents play in once `show` is true. */
+export function TrustPill({ show = true }: { show?: boolean }) {
   return (
     <MotionConfig reducedMotion="user">
       <motion.div
         variants={pill}
         initial="hidden"
-        animate="show"
+        animate={show ? "show" : "hidden"}
         className="glass relative flex w-full flex-wrap items-center gap-x-8 gap-y-3 rounded-[28px] px-4 py-4 text-brand-foreground [--glass-opacity:0.7] sm:px-8 sm:py-5 md:w-fit"
       >
         <motion.div variants={fadeUp} className="flex items-center gap-3">

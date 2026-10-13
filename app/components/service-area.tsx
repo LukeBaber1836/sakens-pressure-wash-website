@@ -3,8 +3,8 @@ import { ServiceAreaMap } from "./service-area-map";
 
 export function ServiceArea() {
   return (
-    <section id="area" className="site-container py-20 sm:py-26">
-      <div className="flex flex-col gap-10 rounded-[24px] bg-tint p-6 sm:p-10 lg:flex-row lg:items-center lg:gap-16 lg:p-14">
+    <section id="area" className="bg-tint">
+      <div className="site-container flex flex-col gap-10 py-20 sm:py-26 lg:flex-row lg:items-center lg:justify-center lg:gap-16">
         <div className="h-80 w-full shrink-0 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-brand-foreground/10 sm:h-[360px] lg:w-[520px]">
           <ServiceAreaMap />
         </div>
