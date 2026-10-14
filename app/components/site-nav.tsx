@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
+  AnimatePresence,
   motion,
   MotionConfig,
   useMotionValueEvent,
   useScroll,
 } from "motion/react";
-import { TbArrowUpRight } from "react-icons/tb";
+import { TbArrowUpRight, TbMenu2, TbX } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FreshOnShow } from "./fresh-on-show";
@@ -16,9 +17,9 @@ import { HERO_INTRO, shouldPlayHeroIntro } from "./hero-intro";
 import { SiteLogo } from "./site-logo";
 
 const navLinks = [
-  { label: "Services", href: "/#services" },
+  { label: "Services", href: "/services" },
   { label: "Our work", href: "/work" },
-  { label: "Reviews", href: "/#reviews" },
+  { label: "Reviews", href: "/reviews" },
   { label: "About", href: "/about" },
 ];
 
@@ -29,6 +30,8 @@ const DETACH_AT = 48;
 const SCROLL_JUMP = 300;
 
 const spring = { type: "spring", bounce: 0.05, visualDuration: 0.4 } as const;
+
+const fade = { closed: { opacity: 0 }, open: { opacity: 1 } };
 
 /**
  * `intro` holds the nav back until its cue in the homepage hero's opening animation. The nav starts
@@ -49,6 +52,8 @@ function NavBar({ intro }: { intro: boolean }) {
   // browser restoring a position. Only ordinary scrolling morphs the bar into the pill.
   const [instant, setInstant] = useState(true);
   const [shown, setShown] = useState(!intro);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
   // Match the page's scroll position before the first paint. It can't be read during render, as the
   // server always renders the bar at the top of the page.
@@ -71,12 +76,34 @@ function NavBar({ intro }: { intro: boolean }) {
     return () => clearTimeout(timer);
   }, [intro]);
 
+  // Close the phone menu on any click outside the nav, on Escape, or once the full links show at lg.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = () => setMenuOpen(false);
+    const onPointerDown = (e: PointerEvent) => {
+      if (!headerRef.current?.contains(e.target as Node)) close();
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    const desktop = window.matchMedia("(min-width: 64rem)");
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", close);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", close);
+    };
+  }, [menuOpen]);
+
   return (
     <MotionConfig
       transition={instant ? { duration: 0 } : spring}
       reducedMotion="user"
     >
       <motion.header
+        ref={headerRef}
         layoutRoot
         className={cn(
           "pointer-events-none sticky top-0 z-40 h-20 transition-opacity duration-500 ease-out",
@@ -85,7 +112,7 @@ function NavBar({ intro }: { intro: boolean }) {
       >
         <div
           className={cn(
-            "site-container flex h-full items-center",
+            "site-container relative flex h-full items-center",
             detached ? "justify-center" : "justify-between",
           )}
         >
@@ -95,7 +122,7 @@ function NavBar({ intro }: { intro: boolean }) {
             className={cn(
               "pointer-events-auto relative flex items-center",
               detached
-                ? "gap-6 py-2.5 pr-2.5 pl-6 sm:gap-10"
+                ? "gap-6 py-2.5 pr-2.5 pl-6 max-lg:w-full max-lg:justify-between sm:gap-10"
                 : "w-full justify-between",
             )}
           >
@@ -103,14 +130,13 @@ function NavBar({ intro }: { intro: boolean }) {
               layout
               aria-hidden="true"
               initial={false}
-              animate={{ opacity: detached ? 1 : 0 }}
+              animate={{ opacity: detached || menuOpen ? 1 : 0 }}
               style={{ borderRadius: 32 }}
               className="glass absolute inset-0 [--glass-opacity:0.82]"
             />
 
             <motion.div layout className="relative shrink-0">
               <Link href="/" aria-label="Saken's Pressure Washing home">
-                {/* On phones the floating pill only has room for the shield beside the button. */}
                 <SiteLogo
                   preload
                   className={
@@ -118,7 +144,6 @@ function NavBar({ intro }: { intro: boolean }) {
                       ? "text-[15px] sm:text-[17px]"
                       : "text-[17px] sm:text-[22px]"
                   }
-                  wordmarkClassName={cn(detached && "max-sm:hidden")}
                 />
               </Link>
             </motion.div>
@@ -128,7 +153,7 @@ function NavBar({ intro }: { intro: boolean }) {
               aria-label="Main"
               className="relative flex items-center gap-1"
             >
-              <ul className="hidden items-center gap-1 md:flex">
+              <ul className="hidden items-center gap-1 lg:flex">
                 {navLinks.map((link) => (
                   <li key={link.href}>
                     <Button
@@ -145,13 +170,79 @@ function NavBar({ intro }: { intro: boolean }) {
                 variant="brand"
                 nativeButton={false}
                 render={<Link href="/contact" />}
-                className={cn(detached && "rounded-full")}
+                className={cn("max-lg:hidden", detached && "rounded-full")}
               >
                 Free estimate
                 <TbArrowUpRight data-icon="inline-end" />
               </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={menuOpen}
+                aria-controls="site-menu"
+                onClick={() => setMenuOpen((open) => !open)}
+                className="size-12 rounded-full lg:hidden [&_svg:not([class*='size-'])]:size-7"
+              >
+                {menuOpen ? <TbX /> : <TbMenu2 />}
+              </Button>
             </motion.nav>
           </motion.div>
+
+          {/* Phone menu. It sits outside the pill so the pill's layout animations don't stretch it.
+              The glass fades itself rather than its wrapper: a wrapper below full opacity would stop
+              the glass blurring the page until the fade finished. */}
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                id="site-menu"
+                initial="closed"
+                animate="open"
+                exit="closed"
+                className="pointer-events-auto absolute inset-x-4 top-full rounded-[28px] p-3 lg:hidden"
+              >
+                <motion.div
+                  aria-hidden="true"
+                  variants={fade}
+                  transition={spring}
+                  className="glass absolute inset-0 rounded-[inherit] [--glass-opacity:0.82]"
+                />
+                <motion.div
+                  variants={fade}
+                  transition={spring}
+                  className="relative"
+                >
+                  <ul className="flex flex-col">
+                    {navLinks.map((link) => (
+                      <li key={link.href}>
+                        <Button
+                          variant="ghost"
+                          size="lg"
+                          nativeButton={false}
+                          render={<Link href={link.href} />}
+                          onClick={() => setMenuOpen(false)}
+                          className="w-full justify-start px-4"
+                        >
+                          {link.label}
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    variant="brand"
+                    size="lg"
+                    nativeButton={false}
+                    render={<Link href="/contact" />}
+                    onClick={() => setMenuOpen(false)}
+                    className="mt-2 w-full rounded-full"
+                  >
+                    Book free estimate
+                    <TbArrowUpRight data-icon="inline-end" />
+                  </Button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.header>
     </MotionConfig>

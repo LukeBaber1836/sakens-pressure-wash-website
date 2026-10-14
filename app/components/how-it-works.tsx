@@ -30,6 +30,14 @@ type AnimatedIcon = ComponentType<
   }
 >;
 
+// How an outgoing step or drawing drifts out of focus as the next one comes into it.
+const swap = { duration: 0.7, ease: [0.4, 0, 0.2, 1] } as const;
+const focus = (on: boolean) => ({
+  opacity: on ? 1 : 0,
+  filter: on ? "blur(0px)" : "blur(14px)",
+  scale: on ? 1 : 1.04,
+});
+
 type Step = {
   title: string;
   text: string;
@@ -54,10 +62,10 @@ const steps: Step[] = [
     text: "Pick a day that works for you. We'll confirm the time and let you know exactly what to expect.",
     Icon: CalendarCheckIcon,
     image: {
-      src: "/images/how-it-works-truck.png",
+      src: "/images/how-it-works-truck-02.png",
       alt: "Illustration of a pickup towing a pressure washing trailer, parked in front of a house",
-      width: 1216,
-      height: 636,
+      width: 1199,
+      height: 699,
     },
   },
   {
@@ -65,18 +73,19 @@ const steps: Step[] = [
     text: "We show up on time, wash everything top to bottom, and walk the property with you when we're done.",
     Icon: SparklesIcon,
     image: {
-      src: "/images/how-it-works-clean.png",
+      src: "/images/how-it-works-clean-02.png",
       alt: "Illustration of two workers washing a house, one pressure washing the driveway and one spraying the siding",
-      width: 988,
-      height: 725,
+      width: 1177,
+      height: 667,
     },
   },
 ];
 
 /**
- * The three booking steps. On large screens the section pins while you scroll through it: the
+ * The three booking steps. The section pins while you scroll through it. On large screens the
  * active step lights up in the list on the left and its illustration takes over on the right.
- * Smaller screens get the steps stacked, each with its own illustration.
+ * Smaller screens show one step's text at a time above the illustration, each blurring out as the
+ * next takes its place.
  */
 export function HowItWorks() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -99,8 +108,9 @@ export function HowItWorks() {
         className="mt-20 bg-tint sm:mt-26"
       >
         {/* Tall track for the pinned layout to scroll through; a third of it per step. */}
-        <div ref={trackRef} className="relative lg:h-[300vh]">
-          <div className="site-container py-20 sm:py-26 lg:sticky lg:top-0 lg:flex lg:h-svh lg:flex-col lg:justify-center lg:py-0 lg:pt-6">
+        <div ref={trackRef} className="relative h-[300vh]">
+          {/* Below lg the top padding clears the floating nav. */}
+          <div className="site-container sticky top-0 flex h-svh flex-col justify-center pt-20 pb-6 lg:pt-6 lg:pb-0">
             <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
               <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">
                 How it works
@@ -113,8 +123,23 @@ export function HowItWorks() {
               </h2>
             </div>
 
-            <div className="mt-12 grid items-center gap-16 lg:mt-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-              <ol className="flex flex-col gap-14 lg:gap-10">
+            <div className="mt-8 grid items-center gap-6 lg:mt-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
+              {/* Small screens: every step's text shares one spot and only the active one shows. */}
+              <ol className="grid lg:hidden">
+                {steps.map((step, i) => (
+                  <StepItem
+                    key={step.title}
+                    step={step}
+                    index={i}
+                    state={
+                      i < active ? "done" : i === active ? "active" : "upcoming"
+                    }
+                    stacked
+                  />
+                ))}
+              </ol>
+
+              <ol className="hidden flex-col gap-10 lg:flex">
                 {steps.map((step, i) => (
                   <StepItem
                     key={step.title}
@@ -127,22 +152,22 @@ export function HowItWorks() {
                 ))}
               </ol>
 
-              {/* The illustration panel, swapped to the active step. */}
-              <div className="relative hidden w-full lg:block lg:max-w-[calc((100svh-15rem)*1.5)] lg:justify-self-end">
-                <TiltedAccent className="rounded-[32px]" />
+              {/* The illustration panel, swapped to the active step. Capped by the screen height so the
+                  pinned section always fits; below lg it sits under the step's text. */}
+              <div className="relative mx-auto w-full max-w-[calc((100svh-24rem)*1.5)] lg:mx-0 lg:max-w-[calc((100svh-15rem)*1.5)] lg:justify-self-end">
+                {/* Leans the other way on the middle step, then back. */}
+                <TiltedAccent
+                  className="rounded-[32px]"
+                  tilt={active === 1 ? -3 : 3}
+                />
                 <div className="relative aspect-[3/2] overflow-hidden rounded-[32px] bg-white shadow-[0_30px_60px_-30px_rgba(1,20,45,0.35)] ring-1 ring-brand-foreground/10">
                   {steps.map(({ title, image }, i) => (
                     <motion.div
                       key={title}
                       initial={false}
-                      // The outgoing drawing drifts out of focus as the next one comes into it.
-                      animate={{
-                        opacity: active === i ? 1 : 0,
-                        filter: active === i ? "blur(0px)" : "blur(14px)",
-                        scale: active === i ? 1 : 1.04,
-                      }}
-                      transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-                      className="absolute inset-4"
+                      animate={focus(active === i)}
+                      transition={swap}
+                      className="absolute inset-3 sm:inset-4"
                     >
                       <Image
                         src={image.src}
@@ -167,12 +192,15 @@ function StepItem({
   step,
   index,
   state,
+  stacked = false,
 }: {
   step: Step;
   index: number;
   state: "done" | "active" | "upcoming";
+  /** Small-screen layout: just the title and text, with the steps on top of each other. */
+  stacked?: boolean;
 }) {
-  const { Icon, image } = step;
+  const { Icon } = step;
   const icon = useRef<IconHandle>(null);
 
   // Play the step's icon each time it becomes the active one.
@@ -182,53 +210,61 @@ function StepItem({
     return () => clearTimeout(timer);
   }, [state]);
 
-  return (
-    <li data-state={state} className="group flex flex-col gap-6">
-      <div className="flex gap-6">
-        <span
-          className={cn(
-            "grid size-12 shrink-0 place-items-center rounded-full border-2 font-heading text-lg font-bold transition-colors duration-500",
-            state === "active"
-              ? "border-brand-foreground bg-brand-foreground text-white"
-              : "border-brand-foreground/15 text-brand-foreground/40",
-          )}
-        >
-          {state === "active" ? (
-            <Icon ref={icon} size={22} strokeWidth={2} />
-          ) : state === "done" ? (
-            <TbCheck className="size-5" aria-hidden="true" />
-          ) : (
-            index + 1
-          )}
-        </span>
-        <div
-          className={cn(
-            // The top padding lines the title up with the middle of the marker.
-            "flex flex-col gap-2 pt-2 transition-opacity duration-500",
-            // The whole list stays readable on small screens, where nothing is pinned.
-            state !== "active" && "lg:opacity-40",
-          )}
-        >
-          <h3 className="text-2xl leading-[1.15] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[28px]">
-            {step.title}
-          </h3>
-          <p className="text-base leading-relaxed text-foreground/80 sm:text-[17px]">
-            {step.text}
-          </p>
-        </div>
-      </div>
+  const copy = (
+    <div
+      className={cn(
+        "flex flex-col gap-2 transition-opacity duration-500",
+        // The top padding lines the title up with the middle of the marker.
+        !stacked && "pt-2",
+        !stacked && state !== "active" && "opacity-40",
+      )}
+    >
+      <h3 className="text-2xl leading-[1.15] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[28px]">
+        {step.title}
+      </h3>
+      <p className="text-base leading-relaxed text-foreground/80 sm:text-[17px]">
+        {step.text}
+      </p>
+    </div>
+  );
 
-      {/* Stacked layout only: each step carries its own illustration. */}
-      <div className="rounded-[28px] bg-white p-3 shadow-[0_20px_40px_-28px_rgba(1,20,45,0.35)] ring-1 ring-brand-foreground/10 lg:hidden">
-        <Image
-          src={image.src}
-          alt={image.alt}
-          width={image.width}
-          height={image.height}
-          sizes="100vw"
-          className="h-auto w-full"
-        />
-      </div>
+  if (stacked) {
+    return (
+      <motion.li
+        data-state={state}
+        aria-hidden={state !== "active" ? true : undefined}
+        initial={false}
+        animate={focus(state === "active")}
+        transition={swap}
+        className={cn(
+          "col-start-1 row-start-1",
+          state !== "active" && "pointer-events-none",
+        )}
+      >
+        {copy}
+      </motion.li>
+    );
+  }
+
+  return (
+    <li data-state={state} className="group flex gap-6">
+      <span
+        className={cn(
+          "grid size-12 shrink-0 place-items-center rounded-full border-2 font-heading text-lg font-bold transition-colors duration-500",
+          state === "active"
+            ? "border-brand-foreground bg-brand-foreground text-white"
+            : "border-brand-foreground/15 text-brand-foreground/40",
+        )}
+      >
+        {state === "active" ? (
+          <Icon ref={icon} size={22} strokeWidth={2} />
+        ) : state === "done" ? (
+          <TbCheck className="size-5" aria-hidden="true" />
+        ) : (
+          index + 1
+        )}
+      </span>
+      {copy}
     </li>
   );
 }

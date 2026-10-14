@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, MotionConfig, type Variants } from "motion/react";
 import { useEffect, useState } from "react";
 import type { IconType } from "react-icons";
-import { TbBuildingStore, TbHome, TbPhoto } from "react-icons/tb";
+import { TbBuildingSkyscraper, TbHome, TbPhoto } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { NotchedCard } from "../components/notched-card";
@@ -13,7 +13,8 @@ import { NotchedCard } from "../components/notched-card";
 const facts: { label: string; icon: IconType }[] = [
   { label: "Photos from real jobs", icon: TbPhoto },
   { label: "Homes", icon: TbHome },
-  { label: "Businesses", icon: TbBuildingStore },
+  // Same marks as the quote form's residential and commercial choices.
+  { label: "Businesses", icon: TbBuildingSkyscraper },
 ];
 
 const fadeUp: Variants = {

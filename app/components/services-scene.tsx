@@ -3,7 +3,12 @@
 import { useState, type FocusEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, MotionConfig, type Variants } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  MotionConfig,
+  type Variants,
+} from "motion/react";
 import { TbArrowUpRight, TbPlus } from "react-icons/tb";
 import { cn } from "@/lib/utils";
 import type { ServiceHotspot } from "./services-breakdown-data";
@@ -17,6 +22,20 @@ export type Scene = {
     viewBox: string;
     parts: SurfacePart[];
   };
+};
+
+/**
+ * Where each service card's link goes: the estimate form with that service already picked, or (on the
+ * Services page) down to the service's own write-up.
+ */
+export type CardLinkTarget = "estimate" | "details";
+
+const cardLinks = {
+  estimate: (id: string) => ({
+    href: `/contact?service=${id}`,
+    label: "Get a free estimate",
+  }),
+  details: (id: string) => ({ href: `#${id}`, label: "See what's included" }),
 };
 
 export type SurfacePart = { service: string; d: string; color: string };
@@ -39,7 +58,7 @@ const dotEntrance: Variants = {
 /** Entrance rank per index: sorting by the golden-ratio fraction of each index scatters any count. */
 function scatteredRanks(count: number) {
   const order = Array.from({ length: count }, (_, i) => i).sort(
-    (a, b) => ((a * 0.618) % 1) - ((b * 0.618) % 1)
+    (a, b) => ((a * 0.618) % 1) - ((b * 0.618) % 1),
   );
   return order.reduce<number[]>((ranks, index, rank) => {
     ranks[index] = rank;
@@ -47,12 +66,19 @@ function scatteredRanks(count: number) {
   }, []);
 }
 
-export function ServicesScene({ scene }: { scene: Scene }) {
+export function ServicesScene({
+  scene,
+  linkTo = "estimate",
+}: {
+  scene: Scene;
+  linkTo?: CardLinkTarget;
+}) {
   const { image, services, surfaces } = scene;
   // The active service: its surface tints and its card opens. Set by its dot or its button below.
   const [active, setActive] = useState<string | null>(null);
 
-  const close = (id: string) => setActive((current) => (current === id ? null : current));
+  const close = (id: string) =>
+    setActive((current) => (current === id ? null : current));
   const ranks = scatteredRanks(services.length);
 
   return (
@@ -74,7 +100,7 @@ export function ServicesScene({ scene }: { scene: Scene }) {
                 fillRule="evenodd"
                 className={cn(
                   "transition-opacity duration-300 motion-reduce:transition-none",
-                  active === part.service ? "opacity-100" : "opacity-0"
+                  active === part.service ? "opacity-100" : "opacity-0",
                 )}
               />
             ))}
@@ -99,19 +125,25 @@ export function ServicesScene({ scene }: { scene: Scene }) {
             open={active === service.id}
             onOpen={() => setActive(service.id)}
             onClose={() => close(service.id)}
+            link={cardLinks[linkTo](service.id)}
           />
         ))}
       </div>
 
-      <ul className="mt-6 flex flex-wrap justify-center gap-2.5 sm:mt-10">
+      {/* Pulled up into the drawing's faded bottom edge. */}
+      <ul className="relative -mt-2 flex flex-wrap justify-center gap-2.5 sm:-mt-8">
         {services.map((service) => (
           <li key={service.id}>
             <button
               type="button"
               aria-pressed={active === service.id}
               aria-controls={`service-${service.id}`}
-              onPointerEnter={(e) => e.pointerType === "mouse" && setActive(service.id)}
-              onPointerLeave={(e) => e.pointerType === "mouse" && close(service.id)}
+              onPointerEnter={(e) =>
+                e.pointerType === "mouse" && setActive(service.id)
+              }
+              onPointerLeave={(e) =>
+                e.pointerType === "mouse" && close(service.id)
+              }
               onFocus={() => setActive(service.id)}
               onBlur={() => close(service.id)}
               onClick={() => setActive(service.id)}
@@ -119,7 +151,7 @@ export function ServicesScene({ scene }: { scene: Scene }) {
                 "rounded-full px-4 py-2 text-sm font-semibold ring-1 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand",
                 active === service.id
                   ? "bg-brand-foreground text-white ring-brand-foreground"
-                  : "bg-white text-brand-foreground ring-brand-foreground/15 hover:bg-tint"
+                  : "bg-white text-brand-foreground ring-brand-foreground/15 hover:bg-tint",
               )}
             >
               {service.name}
@@ -137,8 +169,10 @@ function Hotspot({
   open,
   onOpen,
   onClose,
+  link,
 }: {
   service: ServiceHotspot;
+  link: { href: string; label: string };
   entranceRank: number;
   open: boolean;
   onOpen: () => void;
@@ -147,7 +181,11 @@ function Hotspot({
   const panelId = `service-${service.id}`;
   const below = service.y < 35;
   const align =
-    service.x < 25 ? "left-0" : service.x > 70 ? "right-0" : "left-1/2 -translate-x-1/2";
+    service.x < 25
+      ? "left-0"
+      : service.x > 70
+        ? "right-0"
+        : "left-1/2 -translate-x-1/2";
 
   const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
     if (!e.currentTarget.contains(e.relatedTarget)) onClose();
@@ -156,7 +194,10 @@ function Hotspot({
   return (
     <div
       style={{ left: `${service.x}%`, top: `${service.y}%` }}
-      className={cn("absolute -translate-x-1/2 -translate-y-1/2", open ? "z-20" : "z-10")}
+      className={cn(
+        "absolute -translate-x-1/2 -translate-y-1/2",
+        open ? "z-20" : "z-10",
+      )}
       onPointerEnter={(e) => e.pointerType === "mouse" && onOpen()}
       onPointerLeave={(e) => e.pointerType === "mouse" && onClose()}
       onFocus={onOpen}
@@ -185,7 +226,7 @@ function Hotspot({
               "relative grid size-7 place-items-center rounded-full shadow-[0_4px_14px_rgba(1,20,45,0.35)] ring-2 ring-white transition-colors",
               open
                 ? "bg-brand text-brand-foreground"
-                : "bg-[color-mix(in_oklch,var(--primary)_55%,white)] text-white"
+                : "bg-[color-mix(in_oklch,var(--primary)_55%,white)] text-white",
             )}
           >
             <TbPlus className="size-4" strokeWidth={3} />
@@ -208,7 +249,7 @@ function Hotspot({
             className={cn(
               "absolute w-64 rounded-2xl bg-white p-4 text-left shadow-[0_18px_40px_-12px_rgba(1,20,45,0.45)] ring-1 ring-brand-foreground/10",
               below ? "top-full mt-2" : "bottom-full mb-2",
-              align
+              align,
             )}
           >
             <h3 className="text-lg leading-tight font-extrabold text-brand-foreground">
@@ -218,11 +259,14 @@ function Hotspot({
               {service.description}
             </p>
             <Link
-              href="/contact"
+              href={link.href}
               className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-brand-foreground underline-offset-4 hover:underline"
             >
-              Get a free estimate
-              <TbArrowUpRight className="size-4 text-brand" aria-hidden="true" />
+              {link.label}
+              <TbArrowUpRight
+                className="size-4 text-brand"
+                aria-hidden="true"
+              />
             </Link>
           </motion.div>
         )}

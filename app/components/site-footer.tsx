@@ -14,9 +14,9 @@ const linkGroups = [
   {
     title: "Pages",
     links: [
-      { label: "All services", href: "/#services" },
+      { label: "All services", href: "/services" },
       { label: "Our work", href: "/work" },
-      { label: "Reviews", href: "/#reviews" },
+      { label: "Reviews", href: "/reviews" },
       { label: "About", href: "/about" },
     ],
   },

@@ -2,31 +2,25 @@
 
 import Image from "next/image";
 import { motion, MotionConfig, type Variants } from "motion/react";
-import { TbShieldCheckFilled } from "react-icons/tb";
+import { FcGoogle } from "react-icons/fc";
+import { TbShieldCheckFilled, TbStarFilled } from "react-icons/tb";
 import { cn } from "@/lib/utils";
+import { Handwritten } from "./handwritten";
 import { TiltedAccent } from "./tilted-accent";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, visualDuration: 0.6 } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", bounce: 0, visualDuration: 0.6 },
+  },
 };
 
 const stagger: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.1 } },
 };
-
-const credentials = [
-  {
-    label: "BBB Accredited Business",
-    badge: { src: "/images/logo-bbb-accredited.png", width: 1498, height: 550 },
-  },
-  {
-    label: "Tyler Area Chamber of Commerce member",
-    badge: { src: "/images/logo-tyler-chamber-125.png", width: 1284, height: 1370 },
-  },
-  { label: "Fully insured", badge: null },
-];
 
 /**
  * `lead` makes this the page's opening section: white instead of gray, no gap above it, and the
@@ -49,7 +43,7 @@ export function MeetTheOwner({ lead = false }: { lead?: boolean }) {
           viewport={{ once: true, amount: 0.25 }}
           className={cn(
             "site-container grid items-center gap-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20",
-            lead ? "pt-10 sm:pt-14" : "py-20 sm:py-26"
+            lead ? "pt-10 sm:pt-14" : "py-20 sm:py-26",
           )}
         >
           <motion.figure
@@ -87,88 +81,102 @@ export function MeetTheOwner({ lead = false }: { lead?: boolean }) {
               className="mt-5 flex max-w-xl flex-col gap-4 text-[17px] leading-relaxed text-foreground/80"
             >
               <p>
-                Saken grew up in Tyler, graduated from UT Tyler, and started Saken&apos;s Pressure
-                Washing to bring the best pressure washing in East Texas to the community he calls
-                home.
+                Saken grew up in Tyler, graduated from UT Tyler, and started
+                Saken&apos;s Pressure Washing to bring the best pressure washing
+                in East Texas to the community he calls home.
               </p>
               <p>
                 He and his team hold every job to the same standard:{" "}
                 <strong className="font-semibold text-brand-foreground">
-                  excellent work, unwavering integrity, and outstanding hospitality
+                  excellent work, unwavering integrity, and outstanding
+                  hospitality
                 </strong>
-                . Whether you&apos;re restoring the look of your home or keeping a commercial
-                property sharp, you can trust them to bring the best clean around.
+                . Whether you&apos;re restoring the look of your home or keeping
+                a commercial property sharp, you can trust them to bring the
+                best clean around.
               </p>
             </motion.div>
 
             <motion.div variants={fadeUp} className="mt-6">
-              <p className="font-hand text-[40px] leading-none text-brand-foreground">
-                Saken Sawyer
+              <p className="text-[40px] leading-none text-brand-foreground">
+                <Handwritten>Saken Sawyer</Handwritten>
               </p>
-              <p className="mt-1 text-sm font-semibold text-foreground/60">Owner &amp; operator</p>
+              <p className="mt-1 text-sm font-semibold text-foreground/60">
+                Owner &amp; operator
+              </p>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="mt-10">
-              <h3 className="text-sm font-bold tracking-[0.12em] text-brand-foreground/60 uppercase">
+            <motion.div variants={fadeUp} className="@container mt-10">
+              <h3 className="text-center text-sm font-bold tracking-[0.12em] text-brand-foreground/60 uppercase @3xl:text-left">
                 Trusted &amp; accredited
               </h3>
-              <ul className="mt-4 grid grid-cols-3 gap-3 sm:gap-4">
-                {/* Logo-only cards; each label is the badge's accessible name instead of a caption. */}
-                {credentials.map(({ label, badge }) => (
-                  <li
-                    key={label}
-                    className="flex h-24 items-center justify-center rounded-2xl bg-white p-3 shadow-sm ring-1 ring-brand-foreground/10 sm:h-28 sm:p-4"
-                  >
-                    {badge ? (
-                      <Image
-                        src={badge.src}
-                        alt={label}
-                        width={badge.width}
-                        height={badge.height}
-                        sizes="160px"
-                        className="h-full w-auto max-w-full object-contain"
-                      />
-                    ) : (
-                      <InsuredSeal label={label} />
-                    )}
-                  </li>
-                ))}
+              {/* An open row rather than cards: the two badges, then the Google rating and insurance as
+                  short labeled facts, with hairlines between them when the column is wide enough for one row.
+                  Until then the heading and the two-by-two grid are centered. */}
+              <ul className="mt-5 grid grid-cols-2 items-center justify-items-center gap-x-6 gap-y-7 @3xl:flex @3xl:gap-0">
+                <li className="@3xl:pr-7">
+                  <Image
+                    src="/images/logo-bbb-accredited.png"
+                    alt="BBB Accredited Business"
+                    width={1498}
+                    height={550}
+                    sizes="160px"
+                    // The logo files have white backgrounds; multiply drops them onto the section color.
+                    className="h-12 w-auto mix-blend-multiply"
+                  />
+                </li>
+                <li className="@3xl:border-l @3xl:border-brand-foreground/15 @3xl:px-7">
+                  <Image
+                    src="/images/logo-tyler-chamber-125.png"
+                    alt="Tyler Area Chamber of Commerce member"
+                    width={1284}
+                    height={1370}
+                    sizes="80px"
+                    className="h-16 w-auto mix-blend-multiply"
+                  />
+                </li>
+                <li className="flex items-center gap-3 @3xl:border-l @3xl:border-brand-foreground/15 @3xl:px-7">
+                  <FcGoogle className="size-9 shrink-0" aria-hidden="true" />
+                  <div>
+                    <div
+                      className="flex gap-0.5 text-brand"
+                      role="img"
+                      aria-label="5 out of 5 stars"
+                    >
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <TbStarFilled
+                          key={i}
+                          className="size-4"
+                          aria-hidden="true"
+                        />
+                      ))}
+                    </div>
+                    <p className="mt-1 text-xs text-foreground/60">
+                      <span className="sr-only">on Google, </span>132 reviews
+                    </p>
+                  </div>
+                </li>
+                <li className="flex items-center gap-3 @3xl:border-l @3xl:border-brand-foreground/15 @3xl:pl-7">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-tint text-brand-foreground ring-1 ring-brand-foreground/10">
+                    <TbShieldCheckFilled
+                      className="size-7"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <div>
+                    <p className="text-sm leading-tight font-bold text-brand-foreground">
+                      Fully insured
+                    </p>
+                    <p className="mt-0.5 text-xs text-foreground/60">
+                      Licensed &amp; insured
+                    </p>
+                  </div>
+                </li>
               </ul>
             </motion.div>
           </div>
         </motion.div>
       </section>
     </MotionConfig>
-  );
-}
-
-/** A round seal for "Fully insured" to sit alongside the BBB and Chamber logos. */
-function InsuredSeal({ label }: { label: string }) {
-  return (
-    <div role="img" aria-label={label} className="relative aspect-square h-full">
-      <svg viewBox="0 0 100 100" aria-hidden="true" className="absolute inset-0 size-full">
-        <circle cx="50" cy="50" r="49" className="fill-brand-foreground" />
-        <circle cx="50" cy="50" r="45" fill="none" className="stroke-brand" strokeWidth="1.5" />
-        <path
-          id="insured-seal-rim"
-          d="M50 50m-35 0a35 35 0 1 1 70 0a35 35 0 1 1-70 0"
-          fill="none"
-        />
-        {/* Rim text sized to wrap the full circle (2π × 35 ≈ 220). */}
-        <text
-          className="fill-white font-heading"
-          fontSize="10.5"
-          fontWeight="800"
-          letterSpacing="1"
-        >
-          <textPath href="#insured-seal-rim" textLength="218" lengthAdjust="spacing">
-            FULLY INSURED • FULLY INSURED •
-          </textPath>
-        </text>
-      </svg>
-      <div className="absolute inset-[27%] flex items-center justify-center rounded-full bg-brand">
-        <TbShieldCheckFilled className="size-[62%] text-brand-foreground" />
-      </div>
-    </div>
   );
 }

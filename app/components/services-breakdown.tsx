@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { TbArrowUpRight } from "react-icons/tb";
+import { Button } from "@/components/ui/button";
 import { ServicesExplorer } from "./services-explorer";
 
 export function ServicesBreakdown() {
@@ -14,6 +17,18 @@ export function ServicesBreakdown() {
 
       <div className="mt-6 sm:mt-8">
         <ServicesExplorer />
+      </div>
+
+      <div className="mt-10 flex justify-center">
+        <Button
+          variant="outline"
+          size="lg"
+          nativeButton={false}
+          render={<Link href="/services" />}
+        >
+          See all services
+          <TbArrowUpRight data-icon="inline-end" />
+        </Button>
       </div>
     </section>
   );

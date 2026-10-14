@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { MeetTheOwner } from "../components/meet-the-owner";
 import { MissionStatement } from "../components/mission-statement";
-import { Reviews } from "../components/reviews";
 import { ServiceArea } from "../components/service-area";
 import { SiteFooter } from "../components/site-footer";
 import { SiteNav } from "../components/site-nav";
@@ -20,7 +19,6 @@ export default function AboutPage() {
       <main className="flex flex-1 flex-col">
         <MeetTheOwner lead />
         <OurValues />
-        <Reviews />
         <MissionStatement />
         <ServiceArea />
       </main>

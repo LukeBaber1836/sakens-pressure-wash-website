@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { cn } from "@/lib/utils";
 import { DoodleCallout } from "./doodle-callout";
 import { commercialServices, houseServices } from "./services-breakdown-data";
-import { COMMERCIAL_VIEWBOX, commercialSurfacePaths } from "./services-commercial-surfaces";
+import {
+  COMMERCIAL_VIEWBOX,
+  commercialSurfacePaths,
+} from "./services-commercial-surfaces";
 import { HOUSE_VIEWBOX, houseSurfacePaths } from "./services-house-surfaces";
-import { ServicesScene, type Scene } from "./services-scene";
+import {
+  ServicesScene,
+  type CardLinkTarget,
+  type Scene,
+} from "./services-scene";
 
 type PropertyType = "residential" | "commercial";
 
@@ -51,8 +58,16 @@ const scenes: Record<PropertyType, Scene> = {
     surfaces: {
       viewBox: COMMERCIAL_VIEWBOX,
       parts: [
-        { service: "building", d: commercialSurfacePaths.building, color: lightGray },
-        { service: "gas-station", d: commercialSurfacePaths["gas-pad"], color: stone },
+        {
+          service: "building",
+          d: commercialSurfacePaths.building,
+          color: lightGray,
+        },
+        {
+          service: "gas-station",
+          d: commercialSurfacePaths["gas-pad"],
+          color: stone,
+        },
         {
           service: "parking-lot",
           d: commercialSurfacePaths["parking-lot"],
@@ -73,8 +88,16 @@ const scenes: Record<PropertyType, Scene> = {
           d: commercialSurfacePaths["construction-stops"],
           color: "oklch(0.88 0.15 95)",
         },
-        { service: "dumpster-pad", d: commercialSurfacePaths.dumpster, color: "oklch(0.45 0.08 155)" },
-        { service: "dumpster-pad", d: commercialSurfacePaths["dumpster-pad"], color: stone },
+        {
+          service: "dumpster-pad",
+          d: commercialSurfacePaths.dumpster,
+          color: "oklch(0.45 0.08 155)",
+        },
+        {
+          service: "dumpster-pad",
+          d: commercialSurfacePaths["dumpster-pad"],
+          color: stone,
+        },
       ],
     },
   },
@@ -87,8 +110,12 @@ const propertyTypes: { id: PropertyType; label: string }[] = [
 
 const slide = { type: "spring", bounce: 0.15, visualDuration: 0.35 } as const;
 
-export function ServicesExplorer() {
+/** `linkTo` sets where each service card points; by default, the estimate form. */
+export function ServicesExplorer({ linkTo }: { linkTo?: CardLinkTarget }) {
   const [type, setType] = useState<PropertyType>("residential");
+  // Unique per explorer: with one fixed id, the thumb would fly in from the homepage's explorer, which
+  // stays mounted in the background, whenever another page showed its own.
+  const thumbId = `property-type-thumb-${useId()}`;
 
   return (
     <MotionConfig reducedMotion="user">
@@ -108,12 +135,14 @@ export function ServicesExplorer() {
                 onClick={() => setType(id)}
                 className={cn(
                   "relative rounded-full px-5 py-2 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand",
-                  type === id ? "text-white" : "text-brand-foreground hover:bg-brand-foreground/5"
+                  type === id
+                    ? "text-white"
+                    : "text-brand-foreground hover:bg-brand-foreground/5",
                 )}
               >
                 {type === id && (
                   <motion.span
-                    layoutId="property-type-thumb"
+                    layoutId={thumbId}
                     transition={slide}
                     className="absolute inset-0 rounded-full bg-brand-foreground"
                   />
@@ -157,7 +186,7 @@ export function ServicesExplorer() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <ServicesScene scene={scenes[type]} />
+            <ServicesScene scene={scenes[type]} linkTo={linkTo} />
           </motion.div>
         </AnimatePresence>
       </motion.div>

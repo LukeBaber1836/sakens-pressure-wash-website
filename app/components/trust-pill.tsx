@@ -2,6 +2,7 @@
 
 import { motion, MotionConfig, type Variants } from "motion/react";
 import type { IconType } from "react-icons";
+import { FcGoogle } from "react-icons/fc";
 import { TbId, TbStarFilled, TbUser } from "react-icons/tb";
 import { Separator } from "@/components/ui/separator";
 
@@ -52,6 +53,12 @@ export function TrustPill({ show = true }: { show?: boolean }) {
         className="glass relative flex w-full flex-wrap items-center gap-x-8 gap-y-3 rounded-[28px] px-4 py-4 text-brand-foreground [--glass-opacity:0.7] sm:px-8 sm:py-5 md:w-fit"
       >
         <motion.div variants={fadeUp} className="flex items-center gap-3">
+          {/* The Google mark stands in for "Google", which screen readers still get. */}
+          <span className="flex items-center gap-2 text-base font-bold">
+            <FcGoogle className="size-5 shrink-0" aria-hidden="true" />
+            <span className="sr-only">Google rating</span>
+            5.0
+          </span>
           <motion.span
             variants={stars}
             className="flex gap-0.5 text-brand"
@@ -64,9 +71,7 @@ export function TrustPill({ show = true }: { show?: boolean }) {
               </motion.span>
             ))}
           </motion.span>
-          <span className="text-base font-bold">
-            5.0 on Google <span className="font-medium text-brand-foreground/60">(132 reviews)</span>
-          </span>
+          <span className="text-base font-medium text-brand-foreground/60">132 reviews</span>
         </motion.div>
         {trustItems.map(({ label, icon: Icon }) => (
           <motion.div key={label} variants={fadeUp} className="flex items-center gap-8">

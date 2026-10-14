@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, MotionConfig } from "motion/react";
+import { cn } from "@/lib/utils";
 import { ReviewsColumn } from "./reviews-column";
 import { reviews } from "./reviews-data";
 
@@ -11,10 +12,17 @@ const columns = [
   { reviews: reviews.slice(6, 9), duration: 36, direction: "up", className: "hidden lg:block" },
 ] as const;
 
-export function Reviews() {
+/** `lead` makes this the page's opening section: less space above it, and the heading becomes the h1. */
+export function Reviews({ lead = false }: { lead?: boolean }) {
+  const Heading = lead ? "h1" : "h2";
+
   return (
     <MotionConfig reducedMotion="user">
-      <section id="reviews" aria-labelledby="reviews-heading" className="site-container pt-20 sm:pt-26">
+      <section
+        id="reviews"
+        aria-labelledby="reviews-heading"
+        className={cn("site-container", lead ? "pt-10 sm:pt-14" : "pt-20 sm:pt-26")}
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -23,12 +31,12 @@ export function Reviews() {
           className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center"
         >
           <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">Reviews</p>
-          <h2
+          <Heading
             id="reviews-heading"
             className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
           >
             Locals Trust Us
-          </h2>
+          </Heading>
           <p className="text-[17px] leading-relaxed text-foreground/80">
             Homeowners and businesses across East Texas on what it&apos;s like to work with Saken.
           </p>

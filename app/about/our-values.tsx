@@ -1,33 +1,38 @@
 "use client";
 
 import Image from "next/image";
-import { motion, MotionConfig, type Variants } from "motion/react";
-import type { IconType } from "react-icons";
-import { TbHeartHandshake, TbScale, TbSparkles } from "react-icons/tb";
+import { motion, MotionConfig, useInView, type Variants } from "motion/react";
+import { useRef } from "react";
+import { Handwritten } from "../components/handwritten";
 import { TiltedAccent } from "../components/tilted-accent";
 
 // The three standards from the owner's story, spelled out.
-const values: { title: string; text: string; icon: IconType }[] = [
+const values: { title: string; text: string }[] = [
   {
     title: "Excellent work",
     text: "The right method for every surface, from a low-pressure soft wash on your roof to a surface cleaner on your driveway. We don't call it done until it looks right.",
-    icon: TbSparkles,
   },
   {
     title: "Unwavering integrity",
     text: "Saken looks over the property in person and gives you a free, honest price, along with straight talk about what to expect.",
-    icon: TbScale,
   },
   {
     title: "Outstanding hospitality",
     text: "We show up on time, treat your property like our own, and walk it with you when we're finished.",
-    icon: TbHeartHandshake,
   },
 ];
 
+// Seconds to write each number, and the pause before the next one starts.
+const NUMBER_WRITE = 0.7;
+const NUMBER_GAP = 0.75;
+
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, visualDuration: 0.6 } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", bounce: 0, visualDuration: 0.6 },
+  },
 };
 
 const stagger: Variants = {
@@ -36,9 +41,16 @@ const stagger: Variants = {
 };
 
 export function OurValues() {
+  // One trigger for all three numbers, so their hand-off timing holds however the list scrolls in.
+  const listRef = useRef<HTMLUListElement>(null);
+  const listInView = useInView(listRef, { once: true, amount: 0.5 });
+
   return (
     <MotionConfig reducedMotion="user">
-      <section aria-labelledby="values-heading" className="site-container pt-20 sm:pt-26">
+      <section
+        aria-labelledby="values-heading"
+        className="site-container pt-20 sm:pt-26"
+      >
         <motion.div
           variants={stagger}
           initial="hidden"
@@ -55,14 +67,25 @@ export function OurValues() {
               The same standard on every job
             </motion.h2>
 
-            <ul className="mt-10 flex flex-col gap-8">
-              {values.map(({ title, text, icon: Icon }) => (
+            <ul ref={listRef} className="mt-10 flex flex-col gap-8">
+              {values.map(({ title, text }, i) => (
                 <motion.li key={title} variants={fadeUp} className="flex gap-5">
-                  <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-tint ring-1 ring-brand-foreground/10">
-                    <Icon className="size-7 text-brand" aria-hidden="true" />
+                  {/* Each number writes itself in by hand once the one before it is done. */}
+                  <span aria-hidden="true" className="w-16 shrink-0">
+                    <Handwritten
+                      play={listInView}
+                      duration={NUMBER_WRITE}
+                      delay={0.3 + i * (NUMBER_WRITE + NUMBER_GAP)}
+                      weight={1.7}
+                      className="text-[46px] leading-none text-brand"
+                    >
+                      {`#${i + 1}`}
+                    </Handwritten>
                   </span>
                   <div className="flex flex-col gap-1.5">
-                    <h3 className="text-xl font-bold text-brand-foreground">{title}</h3>
+                    <h3 className="text-xl font-bold text-brand-foreground">
+                      {title}
+                    </h3>
                     <p className="max-w-xl text-[17px] leading-relaxed text-foreground/80">
                       {text}
                     </p>

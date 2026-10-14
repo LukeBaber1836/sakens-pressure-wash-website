@@ -1,3 +1,4 @@
+import { FinalCta } from "./components/final-cta";
 import { Hero } from "./components/hero";
 import { HowItWorks } from "./components/how-it-works";
 import { MeetTheOwner } from "./components/meet-the-owner";
@@ -22,6 +23,7 @@ export default function Home() {
         <Reviews />
         <MissionStatement />
         <ServiceArea />
+        <FinalCta />
       </main>
       <SiteFooter />
     </>

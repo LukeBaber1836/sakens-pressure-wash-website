@@ -1,10 +1,14 @@
-// Timeline (in ms from first paint) for the homepage intro, shared by the hero and the nav. The card
-// sits in its frame from the start; the copy fades up, the nav fades in, then the trust pill rises into
-// the card's notch. Everything settles by about 1.5s.
+// Timeline (in ms from when the page's scripts start) for the homepage intro, shared by the hero and
+// the nav. The page holds white for half a second while everything settles, the video card fades in,
+// then the copy fades up, the nav fades in, and the trust pill rises into the card's notch. Once
+// everything has settled, a hand-drawn line underlines the phone number.
 export const HERO_INTRO = {
-  copyAt: 150,
-  navAt: 300,
-  pillAt: 450,
+  cardAt: 500,
+  copyAt: 1000,
+  navAt: 1150,
+  pillAt: 1800,
+  // Half a second after the pill has finished rising.
+  underlineAt: 2900,
 };
 
 /**
