@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Caveat, Fraunces, Public_Sans, Raleway } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         caveat.variable
       )}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {children}
+        <Script src="https://www.lukebaber.com/review/loader.js" />
+      </body>
     </html>
   );
 }
