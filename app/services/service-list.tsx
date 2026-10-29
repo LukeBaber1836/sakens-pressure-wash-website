@@ -215,7 +215,7 @@ function HoaCallout() {
       id="hoa"
       aria-labelledby="hoa-heading"
       {...reveal}
-      className="mt-20 grid scroll-mt-32 items-center gap-10 rounded-[32px] bg-brand-foreground p-6 text-white sm:mt-26 sm:p-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:p-14"
+      className="mt-20 grid scroll-mt-32 grid-cols-[minmax(0,1fr)] items-center gap-10 rounded-[32px] bg-brand-foreground p-6 text-white sm:mt-26 sm:p-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:p-14"
     >
       <div className="flex flex-col items-start">
         <h2
@@ -249,7 +249,8 @@ function HoaCallout() {
           size="xl"
           nativeButton={false}
           render={<Link href={`/contact?service=${hoaPackage.id}`} />}
-          className="mt-9"
+          // Allowed to wrap on the narrowest phones rather than push the card past the screen.
+          className="mt-9 max-w-full max-sm:h-auto max-sm:min-h-14 max-sm:py-3 max-sm:whitespace-normal"
         >
           Talk to us about your HOA
           <TbArrowUpRight data-icon="inline-end" />

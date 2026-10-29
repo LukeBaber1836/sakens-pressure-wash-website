@@ -163,6 +163,27 @@ export function ServicesScene({
   );
 }
 
+/**
+ * On narrow phones a card centred on its dot can run past the screen edge, so nudge it back in,
+ * leaving a small margin. Runs as the card mounts, before it's painted.
+ */
+function keepOnScreen(panel: HTMLDivElement | null) {
+  if (!panel) return;
+  const margin = 12;
+  // The ref can fire again on a card that's already been nudged, so measure from where it started.
+  const applied = Number(panel.dataset.nudge ?? 0);
+  const rect = panel.getBoundingClientRect();
+  const left = rect.left - applied;
+  const right = rect.right - applied;
+  const viewport = document.documentElement.clientWidth;
+  const shift =
+    Math.max(margin - left, 0) - Math.max(right - (viewport - margin), 0);
+  panel.dataset.nudge = String(shift);
+  // Both margins, since a card can be pinned by its left or its right edge.
+  panel.style.marginLeft = `${shift}px`;
+  panel.style.marginRight = `${-shift}px`;
+}
+
 function Hotspot({
   service,
   entranceRank,
@@ -238,6 +259,7 @@ function Hotspot({
         {open && (
           <motion.div
             id={panelId}
+            ref={keepOnScreen}
             initial={{ opacity: 0, y: below ? -6 : 6, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{

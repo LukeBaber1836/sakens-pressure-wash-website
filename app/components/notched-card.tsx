@@ -75,7 +75,7 @@ export function NotchedCard({
   children: ReactNode;
   notch: ReactNode;
   notchOpen?: boolean;
-  /** For a card that starts notched: fade in once the mask is ready, rather than appear at once. */
+  /** For a card that starts notched: fade in once the notch is cut, rather than appear at once. */
   fadeIn?: boolean;
   className?: string;
 }) {
@@ -89,7 +89,7 @@ export function NotchedCard({
   const openRef = useRef(notchOpen ? 1 : 0);
   const redrawRef = useRef(() => {});
   // A card that starts with the notch closed is just a rounded rectangle, which CSS alone draws, so it
-  // can show from the first paint; only a card that starts notched waits for its mask.
+  // can show from the first paint; only a card that starts notched waits for its clip path.
   const [startsNotched] = useState(notchOpen);
 
   useLayoutEffect(() => {
@@ -113,10 +113,9 @@ export function NotchedCard({
       // The item rides up with the notch's top edge.
       item.style.transform = open < 1 ? `translateY(${fullNh - nh}px)` : "";
       item.style.opacity = open < 1 ? String(open) : "";
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><path d="${path}"/></svg>`;
-      const mask = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-      card.style.maskImage = mask;
-      card.style.setProperty("-webkit-mask-image", mask);
+      // A clip path rather than an SVG mask image: mobile browsers decode each new mask image
+      // asynchronously and hide the card until it's ready, so redrawing one every frame flickered.
+      card.style.clipPath = `path("${path}")`;
       shadow.setAttribute("viewBox", `0 0 ${w} ${h}`);
       shadow.querySelector("path")?.setAttribute("d", path);
       // Reveal only once the notch is cut, so the first paint never shows a plain rectangle.
@@ -147,7 +146,7 @@ export function NotchedCard({
   }, [notchOpen]);
 
   return (
-    // Hidden until the mask is in place, then fades in. Children can key their own entrances off
+    // Hidden until the clip path is in place, then fades in. Children can key their own entrances off
     // `group-data-ready/notch:`.
     <div
       ref={rootRef}
@@ -162,12 +161,12 @@ export function NotchedCard({
       <div
         ref={cardRef}
         className={cn(
-          "overflow-hidden [mask-size:100%_100%] [mask-repeat:no-repeat]",
+          "overflow-hidden",
           className,
         )}
       >
         {children}
-        {/* Inset shadow: a blurred stroke along the outline, its outer half clipped by the mask.
+        {/* Inset shadow: a blurred stroke along the outline, its outer half clipped by the card's outline.
             Nudged down so it gathers along the top edges, like an inset box-shadow with a y offset. */}
         <svg
           ref={shadowRef}

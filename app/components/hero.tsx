@@ -84,7 +84,7 @@ function HeroCard() {
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,20,45,0.82)_0%,rgba(1,20,45,0.55)_42%,rgba(1,20,45,0.05)_75%)]" />
 
-          <div className="relative flex flex-1 flex-col justify-center gap-7 px-6 pt-12 pb-44 text-white sm:w-[724px] sm:px-16 sm:pb-24 2xl:w-[948px]">
+          <div className="relative z-10 flex flex-1 flex-col justify-center gap-7 px-6 pt-12 pb-44 text-white sm:w-[724px] sm:px-16 sm:pb-24 2xl:w-[948px]">
             <h1
               className={cn(
                 entrance,
