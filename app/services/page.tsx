@@ -35,8 +35,8 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <ServiceList />
         <MethodsCompare />
+        <ServiceList />
         <Faq />
       </main>
       <SiteFooter />

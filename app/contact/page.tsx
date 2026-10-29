@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Eyebrow } from "../components/eyebrow";
 import { SiteFooter } from "../components/site-footer";
 import { SiteNav } from "../components/site-nav";
 import { QuoteForm } from "./quote-form";
@@ -23,9 +24,9 @@ export default function ContactPage() {
         >
           {/* The confirmation stands on its own, so the heading goes once the request is sent. */}
           <div className="flex flex-col gap-4 text-center group-has-[[data-submitted]]/quote:hidden">
-            <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">
+            <Eyebrow className="self-center">
               Free estimate
-            </p>
+            </Eyebrow>
             <h1
               id="quote-heading"
               className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"

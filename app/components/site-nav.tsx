@@ -26,6 +26,9 @@ const navLinks = [
 // Scroll distance (px) before the logo and links merge into the floating pill.
 const DETACH_AT = 48;
 
+// Lifts the floating pill and the phone menu off the page.
+const floatShadow = "shadow-[0_8px_32px_rgb(1_20_45/0.22)]";
+
 // A scroll this far (px) in one event is a jump, not someone scrolling.
 const SCROLL_JUMP = 300;
 
@@ -132,7 +135,16 @@ function NavBar({ intro }: { intro: boolean }) {
               initial={false}
               animate={{ opacity: detached || menuOpen ? 1 : 0 }}
               style={{ borderRadius: 32 }}
-              className="glass absolute inset-0 [--glass-opacity:0.82]"
+              // Solid white for contrast. At the top of the page, where it only shows behind the open
+              // phone menu, it stays flat: the shadow is for the floating pill. Below lg the pill is
+              // full width either way, so the bar reaches out to the screen edges until it detaches,
+              // giving it room to shrink into the pill as it fades in, as it does on desktop.
+              className={cn(
+                "absolute inset-0 bg-white transition-shadow duration-300",
+                detached
+                  ? floatShadow
+                  : "max-lg:-inset-x-4 sm:max-lg:-inset-x-6",
+              )}
             />
 
             <motion.div layout className="relative shrink-0">
@@ -189,9 +201,7 @@ function NavBar({ intro }: { intro: boolean }) {
             </motion.nav>
           </motion.div>
 
-          {/* Phone menu. It sits outside the pill so the pill's layout animations don't stretch it.
-              The glass fades itself rather than its wrapper: a wrapper below full opacity would stop
-              the glass blurring the page until the fade finished. */}
+          {/* Phone menu. It sits outside the pill so the pill's layout animations don't stretch it. */}
           <AnimatePresence>
             {menuOpen && (
               <motion.div
@@ -205,7 +215,10 @@ function NavBar({ intro }: { intro: boolean }) {
                   aria-hidden="true"
                   variants={fade}
                   transition={spring}
-                  className="glass absolute inset-0 rounded-[inherit] [--glass-opacity:0.82]"
+                  className={cn(
+                    "absolute inset-0 rounded-[inherit] bg-white",
+                    floatShadow,
+                  )}
                 />
                 <motion.div
                   variants={fade}
@@ -236,8 +249,7 @@ function NavBar({ intro }: { intro: boolean }) {
                     onClick={() => setMenuOpen(false)}
                     className="mt-2 w-full rounded-full"
                   >
-                    Book free estimate
-                    <TbArrowUpRight data-icon="inline-end" />
+                    Book a free estimate
                   </Button>
                 </motion.div>
               </motion.div>

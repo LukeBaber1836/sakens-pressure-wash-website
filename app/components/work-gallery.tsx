@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { TbArrowUpRight } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Eyebrow } from "./eyebrow";
 
 const photos = [
   {
@@ -40,9 +41,9 @@ const photos = [
     title: "Pool deck",
   },
   {
-    src: "/images/crew-lift-window-church-01.jpeg",
-    alt: "Two crew members on a lift cleaning the windows of a church",
-    title: "Commercial windows",
+    src: "/images/glass-storefront-01.jpeg",
+    alt: "Spotless floor-to-ceiling glass on a commercial storefront",
+    title: "Storefront glass",
   },
   {
     src: "/images/concrete-spw-logo-clean-01.jpeg",
@@ -82,7 +83,7 @@ export function WorkGallery() {
       <section
         id="work"
         aria-labelledby="work-heading"
-        className="bg-secondary"
+        className="bg-white"
       >
         <div className="site-container py-20 sm:py-26">
           <motion.div
@@ -92,9 +93,9 @@ export function WorkGallery() {
             viewport={{ once: true }}
             className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center"
           >
-            <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">
+            <Eyebrow>
               Our work
-            </p>
+            </Eyebrow>
             <h2
               id="work-heading"
               className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"

@@ -3,7 +3,7 @@ import { ServiceAreaMap } from "./service-area-map";
 
 export function ServiceArea() {
   return (
-    <section id="area" className="bg-tint">
+    <section id="area" className="bg-white">
       {/* Stacked below lg, the towns come first and the map sits under them. */}
       <div className="site-container flex flex-col-reverse gap-10 py-20 sm:py-26 lg:flex-row lg:items-center lg:justify-center lg:gap-16">
         <div className="h-96 w-full shrink-0 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-brand-foreground/10 sm:h-[440px] lg:w-[560px] xl:h-[460px] xl:w-[680px]">

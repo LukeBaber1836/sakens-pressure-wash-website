@@ -9,7 +9,13 @@ export type ServiceDetail = {
   includes: string[];
   method: Method;
   /** For before/after collages: how the two shots are laid out, so they can be labeled. */
-  photo: { src: string; alt: string; beforeAfter?: "stacked" | "side" };
+  photo: {
+    src: string;
+    alt: string;
+    beforeAfter?: "stacked" | "side";
+    /** The after shot is in the first half of the image (top or left) rather than the second. */
+    afterFirst?: boolean;
+  };
 };
 
 export const residentialDetails: ServiceDetail[] = [
@@ -23,9 +29,10 @@ export const residentialDetails: ServiceDetail[] = [
     ],
     method: "soft",
     photo: {
-      src: "/images/before-after-roof-dormers-01.jpeg",
-      alt: "Before and after of a shingle roof with dormers, streaked with algae before and clean after",
+      src: "/images/before-after-roof-house-front-01.jpeg",
+      alt: "Before and after of a hip roof over a stucco house front, streaked with algae before and clean after",
       beforeAfter: "stacked",
+      afterFirst: true,
     },
   },
   {
@@ -97,9 +104,9 @@ export const residentialDetails: ServiceDetail[] = [
     ],
     method: "pressure",
     photo: {
-      src: "/images/before-after-flagstone-patio-seating-01.jpeg",
-      alt: "Before and after of a flagstone patio with seating, darkened before and clean after",
-      beforeAfter: "stacked",
+      src: "/images/before-after-wood-door-brick-entry-01.jpeg",
+      alt: "Before and after of a brick entry walk at a wood front door, green with moss before and clean red brick after",
+      beforeAfter: "side",
     },
   },
   {
@@ -174,9 +181,8 @@ export const commercialDetails: ServiceDetail[] = [
     ],
     method: "pressure",
     photo: {
-      src: "/images/before-after-parking-lot-curb-01.jpeg",
-      alt: "Before and after of a parking lot curb, stained before and clean after",
-      beforeAfter: "side",
+      src: "/images/parking-lot-night-wet-02.jpeg",
+      alt: "A freshly washed concrete parking lot at night, still wet, in front of a lit building entrance",
     },
   },
   {
@@ -189,8 +195,9 @@ export const commercialDetails: ServiceDetail[] = [
     ],
     method: "both",
     photo: {
-      src: "/images/new-build-white-brick-house-01.jpeg",
-      alt: "A newly built white brick and siding home after its cleanup",
+      src: "/images/before-after-parking-lot-curb-01.jpeg",
+      alt: "Before and after of a parking lot curb, stained before and clean after",
+      beforeAfter: "side",
     },
   },
   {

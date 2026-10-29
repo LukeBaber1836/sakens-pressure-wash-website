@@ -1407,14 +1407,6 @@ export const photos: Photo[] = [
     alt: "Stone wall job from the truck",
   },
   {
-    src: "/images/crew-lift-window-church-01.jpeg",
-    width: 3024,
-    height: 4032,
-    category: "windows",
-    caption: "Church windows from the lift",
-    alt: "Church windows from the lift",
-  },
-  {
     src: "/images/crew-window-squeegee-01.jpeg",
     width: 3024,
     height: 4032,

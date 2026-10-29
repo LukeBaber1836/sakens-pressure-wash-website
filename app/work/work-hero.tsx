@@ -8,6 +8,7 @@ import type { IconType } from "react-icons";
 import { TbBuildingSkyscraper, TbHome, TbPhoto } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Eyebrow } from "../components/eyebrow";
 import { NotchedCard } from "../components/notched-card";
 
 const facts: { label: string; icon: IconType }[] = [
@@ -98,9 +99,9 @@ export function WorkHero({ photoCount }: { photoCount: number }) {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,20,45,0.82)_0%,rgba(1,20,45,0.55)_42%,rgba(1,20,45,0.05)_75%)]" />
 
           <div className="relative z-10 flex flex-1 flex-col justify-center gap-6 px-6 pt-12 pb-44 text-white sm:w-[680px] sm:px-16 sm:pb-24">
-            <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">
+            <Eyebrow>
               Our work
-            </p>
+            </Eyebrow>
             <h1 className="text-5xl leading-[1.02] font-extrabold tracking-[-0.025em] sm:text-[55px]">
               See the difference for yourself
             </h1>

@@ -7,7 +7,7 @@ import { faqs } from "./services-content";
 /** Common questions, each opening in place. */
 export function Faq() {
   return (
-    <section aria-labelledby="faq-heading" className="bg-tint">
+    <section aria-labelledby="faq-heading" className="bg-white">
       <div className="site-container py-20 [--site-max:52rem] sm:py-26">
         <div className="flex flex-col items-center gap-4 text-center">
           <h2

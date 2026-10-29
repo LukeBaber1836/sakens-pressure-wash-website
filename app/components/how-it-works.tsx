@@ -19,6 +19,7 @@ import { CalendarCheckIcon } from "@/components/icons/calendar-check";
 import { FilePenIcon } from "@/components/icons/file-pen";
 import { SparklesIcon } from "@/components/icons/sparkles";
 import { cn } from "@/lib/utils";
+import { Eyebrow } from "./eyebrow";
 import { TiltedAccent } from "./tilted-accent";
 
 type IconHandle = { startAnimation: () => void; stopAnimation: () => void };
@@ -51,10 +52,10 @@ const steps: Step[] = [
     text: "Call or send us a message. Saken comes out, looks over the property, and gives you a free, honest price.",
     Icon: FilePenIcon,
     image: {
-      src: "/images/how-it-works-quote-v2.png",
-      alt: "Illustration of a worker in a cap standing in front of a house, writing a quote on his clipboard",
+      src: "/images/how-it-works-quote-04.png",
+      alt: "Illustration of a worker in a cap standing in front of a large stone home, writing a quote on his clipboard",
       width: 1264,
-      height: 848,
+      height: 627,
     },
   },
   {
@@ -62,10 +63,10 @@ const steps: Step[] = [
     text: "Pick a day that works for you. We'll confirm the time and let you know exactly what to expect.",
     Icon: CalendarCheckIcon,
     image: {
-      src: "/images/how-it-works-truck-02.png",
-      alt: "Illustration of a pickup towing a pressure washing trailer, parked in front of a house",
-      width: 1199,
-      height: 699,
+      src: "/images/how-it-works-truck-05.png",
+      alt: "Illustration of a Ford F-150 towing a pressure washing trailer, parked in front of a large stone home",
+      width: 1264,
+      height: 653,
     },
   },
   {
@@ -73,10 +74,10 @@ const steps: Step[] = [
     text: "We show up on time, wash everything top to bottom, and walk the property with you when we're done.",
     Icon: SparklesIcon,
     image: {
-      src: "/images/how-it-works-clean-02.png",
-      alt: "Illustration of two workers washing a house, one pressure washing the driveway and one spraying the siding",
-      width: 1177,
-      height: 667,
+      src: "/images/how-it-works-clean-05.png",
+      alt: "Illustration of two workers washing a large stone home, one pressure washing the driveway and one soft washing the stone wall",
+      width: 1264,
+      height: 627,
     },
   },
 ];
@@ -105,79 +106,90 @@ export function HowItWorks() {
       <section
         id="how-it-works"
         aria-labelledby="how-it-works-heading"
-        className="mt-20 bg-tint sm:mt-26"
+        // A rounded tinted card inset from the screen edges like the hero, edge to edge on phones.
+        className="site-container mt-20 [--site-max:125rem] max-sm:px-0 sm:mt-26"
       >
         {/* Tall track for the pinned layout to scroll through; a third of it per step. */}
         <div ref={trackRef} className="relative h-[300vh]">
-          {/* Below lg the top padding clears the floating nav. */}
-          <div className="site-container sticky top-0 flex h-svh flex-col justify-center pt-20 pb-6 lg:pt-6 lg:pb-0">
-            <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-              <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">
-                How it works
-              </p>
-              <h2
-                id="how-it-works-heading"
-                className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
-              >
-                Booking Is Easy
-              </h2>
-            </div>
+          {/* The pinned panel is the card: held a gutter in from the top and bottom of the screen so
+              its rounded corners stay in view, and edge to edge on phones. */}
+          <div className="sticky top-0 h-svh bg-tint sm:top-4 sm:h-[calc(100svh-2rem)] sm:rounded-[32px]">
+            {/* Below lg the top padding clears the floating nav. */}
+            <div className="site-container flex h-full flex-col justify-center pt-20 pb-6 lg:pt-6 lg:pb-0">
+              <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
+                <Eyebrow>How it works</Eyebrow>
+                <h2
+                  id="how-it-works-heading"
+                  className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+                >
+                  Booking Is Easy
+                </h2>
+              </div>
 
-            <div className="mt-8 grid items-center gap-6 lg:mt-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
-              {/* Small screens: every step's text shares one spot and only the active one shows. */}
-              <ol className="grid lg:hidden">
-                {steps.map((step, i) => (
-                  <StepItem
-                    key={step.title}
-                    step={step}
-                    index={i}
-                    state={
-                      i < active ? "done" : i === active ? "active" : "upcoming"
-                    }
-                    stacked
-                  />
-                ))}
-              </ol>
-
-              <ol className="hidden flex-col gap-10 lg:flex">
-                {steps.map((step, i) => (
-                  <StepItem
-                    key={step.title}
-                    step={step}
-                    index={i}
-                    state={
-                      i < active ? "done" : i === active ? "active" : "upcoming"
-                    }
-                  />
-                ))}
-              </ol>
-
-              {/* The illustration panel, swapped to the active step. Capped by the screen height so the
-                  pinned section always fits; below lg it sits under the step's text. */}
-              <div className="relative mx-auto w-full max-w-[calc((100svh-24rem)*1.5)] lg:mx-0 lg:max-w-[calc((100svh-15rem)*1.5)] lg:justify-self-end">
-                {/* Leans the other way on the middle step, then back. */}
-                <TiltedAccent
-                  className="rounded-[32px]"
-                  tilt={active === 1 ? -3 : 3}
-                />
-                <div className="relative aspect-[3/2] overflow-hidden rounded-[32px] bg-white shadow-[0_30px_60px_-30px_rgba(1,20,45,0.35)] ring-1 ring-brand-foreground/10">
-                  {steps.map(({ title, image }, i) => (
-                    <motion.div
-                      key={title}
-                      initial={false}
-                      animate={focus(active === i)}
-                      transition={swap}
-                      className="absolute inset-3 sm:inset-4"
-                    >
-                      <Image
-                        src={image.src}
-                        alt={active === i ? image.alt : ""}
-                        fill
-                        sizes="(min-width: 1024px) 50vw, 100vw"
-                        className="object-contain"
-                      />
-                    </motion.div>
+              <div className="mt-8 grid items-center gap-6 lg:mt-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
+                {/* Small screens: every step's text shares one spot and only the active one shows. */}
+                <ol className="grid lg:hidden">
+                  {steps.map((step, i) => (
+                    <StepItem
+                      key={step.title}
+                      step={step}
+                      index={i}
+                      state={
+                        i < active
+                          ? "done"
+                          : i === active
+                            ? "active"
+                            : "upcoming"
+                      }
+                      stacked
+                    />
                   ))}
+                </ol>
+
+                <ol className="hidden flex-col gap-10 lg:flex">
+                  {steps.map((step, i) => (
+                    <StepItem
+                      key={step.title}
+                      step={step}
+                      index={i}
+                      state={
+                        i < active
+                          ? "done"
+                          : i === active
+                            ? "active"
+                            : "upcoming"
+                      }
+                    />
+                  ))}
+                </ol>
+
+                {/* The illustration panel, swapped to the active step. Capped by the screen height so the
+                  pinned section always fits; below lg it sits under the step's text. */}
+                <div className="relative mx-auto w-full max-w-[calc((100svh-24rem)*1.5)] sm:max-w-[calc((100svh-26rem)*1.5)] lg:mx-0 lg:max-w-[calc((100svh-17rem)*1.5)] lg:justify-self-end">
+                  {/* Leans the other way on the middle step, then back. */}
+                  <TiltedAccent
+                    className="rounded-[32px]"
+                    tilt={active === 1 ? -3 : 3}
+                  />
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-[32px] bg-white shadow-[0_30px_60px_-30px_rgba(1,20,45,0.35)] ring-1 ring-brand-foreground/10">
+                    {steps.map(({ title, image }, i) => (
+                      <motion.div
+                        key={title}
+                        initial={false}
+                        animate={focus(active === i)}
+                        transition={swap}
+                        className="absolute inset-3 sm:inset-4"
+                      >
+                        <Image
+                          src={image.src}
+                          alt={active === i ? image.alt : ""}
+                          fill
+                          sizes="(min-width: 1024px) 50vw, 100vw"
+                          className="object-contain"
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

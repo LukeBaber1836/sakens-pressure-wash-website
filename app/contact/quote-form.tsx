@@ -53,27 +53,13 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
-  commercialServices,
-  houseServices,
-} from "../components/services-breakdown-data";
-
-type PropertyType = "residential" | "commercial";
-
-type QuoteData = {
-  propertyType: PropertyType | null;
-  businessName: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  street: string;
-  city: string;
-  zip: string;
-  services: string[];
-  details: string;
-};
-
-type Errors = Partial<Record<keyof QuoteData, string>>;
+  servicesFor,
+  validate,
+  type Errors,
+  type PropertyType,
+  type QuoteData,
+} from "./quote";
+import { sendQuote } from "./actions";
 
 const initialData: QuoteData = {
   propertyType: null,
@@ -145,45 +131,6 @@ const PREVIEW_STEPS = true;
 
 const spring = { type: "spring", bounce: 0.1, visualDuration: 0.4 } as const;
 
-type ServiceOption = { id: string; name: string; description: string };
-
-// Offered on the form but not pinned on the homepage illustration, so it's defined here rather than
-// with the hotspots in services-breakdown-data.
-const hoaPackage: ServiceOption = {
-  id: "hoa",
-  name: "HOA cleaning package",
-  description:
-    "Neighborhood entrances, sidewalks, common areas, and amenities cleaned together as one package for your HOA.",
-};
-
-const commercialOptions: ServiceOption[] = [...commercialServices, hoaPackage];
-
-function servicesFor(type: PropertyType | null): ServiceOption[] {
-  return type === "commercial" ? commercialOptions : houseServices;
-}
-
-function validate(step: number, data: QuoteData): Errors {
-  const errors: Errors = {};
-  if (step === 0 && !data.propertyType)
-    errors.propertyType = "Choose residential or commercial.";
-  if (step === 1) {
-    if (data.propertyType === "commercial" && !data.businessName.trim())
-      errors.businessName = "Enter your business name.";
-    if (!data.firstName.trim()) errors.firstName = "Enter your first name.";
-    if (!data.lastName.trim()) errors.lastName = "Enter your last name.";
-    if (!/^\S+@\S+\.\S+$/.test(data.email.trim()))
-      errors.email = "Enter a valid email.";
-    if (data.phone.replace(/\D/g, "").length !== 10)
-      errors.phone = "Enter a 10-digit phone number.";
-    if (!data.street.trim()) errors.street = "Enter the property address.";
-    if (!data.city.trim()) errors.city = "Enter the city.";
-    if (!/^\d{5}$/.test(data.zip.trim())) errors.zip = "Enter a 5-digit ZIP.";
-  }
-  if (step === 2 && data.services.length === 0)
-    errors.services = "Pick at least one service.";
-  return errors;
-}
-
 // (903) 539-8960 as you type.
 function formatPhone(value: string) {
   const d = value.replace(/\D/g, "").slice(0, 10);
@@ -203,6 +150,7 @@ export function QuoteForm({ className }: { className?: string }) {
   const [data, setData] = useState<QuoteData>(initialData);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "done">("idle");
+  const [sendError, setSendError] = useState<string>();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
   const advance = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -278,8 +226,17 @@ export function QuoteForm({ className }: { className?: string }) {
     e.preventDefault();
     if (step < steps.length - 1) return next();
     setStatus("submitting");
-    // TODO: send `data` to the quote inbox once the backend is wired up.
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    setSendError(undefined);
+    const result = await sendQuote(data).catch(() => ({
+      ok: false as const,
+      error:
+        "We couldn't send your request. Please check your connection and try again.",
+    }));
+    if (!result.ok) {
+      setSendError(result.error);
+      setStatus("idle");
+      return;
+    }
     moved.current = true;
     setStatus("done");
   }
@@ -350,6 +307,15 @@ export function QuoteForm({ className }: { className?: string }) {
                 </motion.div>
               </AnimatePresence>
             </div>
+
+            {isLast && sendError && (
+              <p
+                role="alert"
+                className="mt-8 rounded-xl bg-destructive/10 px-4 py-3 text-[15px] font-medium text-destructive"
+              >
+                {sendError}
+              </p>
+            )}
 
             <div className="mt-10 flex items-center justify-between gap-3 border-t border-brand-foreground/10 pt-6">
               {step > 0 ? (
@@ -467,14 +433,14 @@ function TypeStep({
   return (
     <fieldset>
       <legend className="sr-only">Property type</legend>
-      <div role="radiogroup" className="grid gap-4 sm:grid-cols-2">
+      <div role="radiogroup" className="grid grid-cols-2 gap-3 sm:gap-4">
         {propertyTypes.map(({ value, label, text, Icon }, i) => {
           const selected = data.propertyType === value;
           return (
             <label
               key={value}
               className={cn(
-                "relative flex cursor-pointer flex-col items-center gap-4 rounded-3xl bg-white px-6 py-10 text-center ring-1 transition-all duration-200 has-focus-visible:ring-2 has-focus-visible:ring-brand",
+                "relative flex cursor-pointer flex-col items-center gap-3 rounded-3xl bg-white px-3 py-7 text-center ring-1 sm:gap-4 sm:px-6 sm:py-10 transition-all duration-200 has-focus-visible:ring-2 has-focus-visible:ring-brand",
                 selected
                   ? "shadow-[0_20px_40px_-24px_rgba(1,20,45,0.4)] ring-2 ring-brand"
                   : "ring-brand-foreground/10 hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-28px_rgba(1,20,45,0.35)] hover:ring-brand-foreground/25",
@@ -493,25 +459,27 @@ function TypeStep({
               <TbCircleCheckFilled
                 aria-hidden="true"
                 className={cn(
-                  "absolute top-4 right-4 size-6 text-brand transition-all duration-200",
+                  "absolute top-3 right-3 size-5 text-brand sm:top-4 sm:right-4 sm:size-6 transition-all duration-200",
                   selected ? "scale-100 opacity-100" : "scale-50 opacity-0",
                 )}
               />
               <span
                 className={cn(
-                  "grid size-16 place-items-center rounded-2xl transition-colors duration-200",
+                  "grid size-12 place-items-center rounded-2xl transition-colors sm:size-16 duration-200",
                   selected
                     ? "bg-brand text-brand-foreground"
                     : "bg-tint text-brand-foreground",
                 )}
               >
-                <Icon className="size-8" />
+                <Icon className="size-6 sm:size-8" />
               </span>
               <span className="flex flex-col gap-1">
-                <span className="text-xl font-bold text-brand-foreground">
+                <span className="text-lg font-bold text-brand-foreground sm:text-xl">
                   {label}
                 </span>
-                <span className="text-[15px] text-foreground/65">{text}</span>
+                <span className="text-sm text-foreground/65 sm:text-[15px]">
+                  {text}
+                </span>
               </span>
             </label>
           );

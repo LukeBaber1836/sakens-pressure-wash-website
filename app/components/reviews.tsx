@@ -2,6 +2,7 @@
 
 import { motion, MotionConfig } from "motion/react";
 import { cn } from "@/lib/utils";
+import { Eyebrow } from "./eyebrow";
 import { ReviewsColumn } from "./reviews-column";
 import { reviews } from "./reviews-data";
 
@@ -30,16 +31,13 @@ export function Reviews({ lead = false }: { lead?: boolean }) {
           viewport={{ once: true }}
           className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center"
         >
-          <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">Reviews</p>
+          <Eyebrow>Reviews</Eyebrow>
           <Heading
             id="reviews-heading"
             className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
           >
             Locals Trust Us
           </Heading>
-          <p className="text-[17px] leading-relaxed text-foreground/80">
-            Homeowners and businesses across East Texas on what it&apos;s like to work with Saken.
-          </p>
         </motion.div>
 
         {/* Columns scroll at different speeds; the mask fades cards in and out at the top and bottom. */}

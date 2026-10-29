@@ -42,45 +42,52 @@ export function MissionStatement() {
 
   return (
     // Steel blue from Saken's Originals' site, to tie the two brands together.
-    <section id="mission" aria-label="Our mission" className="mt-20 bg-[#4682b4] sm:mt-26">
-      <div className="site-container grid items-center gap-12 py-20 sm:py-26 lg:grid-cols-2 lg:gap-16">
-        <motion.blockquote
-          variants={words}
-          initial={reduced ? "show" : "hidden"}
-          whileInView="show"
-          viewport={{ once: true, amount: 0.6 }}
-          className="flex flex-col items-center text-center"
-        >
-          <motion.span
-            variants={word}
-            aria-hidden="true"
-            className="font-heading text-7xl leading-none font-extrabold text-white/50"
+    // A rounded blue card inset from the screen edges like the hero, edge to edge on phones.
+    <section
+      id="mission"
+      aria-label="Our mission"
+      className="site-container mt-20 [--site-max:125rem] max-sm:px-0 sm:mt-26"
+    >
+      <div className="rounded-[32px] bg-[#4682b4] max-sm:rounded-none">
+        <div className="site-container grid items-center gap-12 py-20 sm:py-26 lg:grid-cols-2 lg:gap-16">
+          <motion.blockquote
+            variants={words}
+            initial={reduced ? "show" : "hidden"}
+            whileInView="show"
+            viewport={{ once: true, amount: 0.6 }}
+            className="flex flex-col items-center text-center"
           >
-            &ldquo;
-          </motion.span>
-          <p className="mt-2 max-w-xl font-serif text-3xl leading-[1.15] font-bold tracking-[-0.01em] text-white uppercase sm:text-[40px]">
-            <BlurWords text={verse} />{" "}
-            <span className="text-brand">
-              <BlurWords text={verseHighlight} />
-            </span>
-          </p>
-          <footer className="mt-3 font-serif text-3xl leading-[1.15] font-normal italic text-white/80 uppercase sm:text-[40px]">
-            <cite>
-              <BlurWords text={citation} />
-            </cite>
-          </footer>
-        </motion.blockquote>
+            <motion.span
+              variants={word}
+              aria-hidden="true"
+              className="font-heading text-7xl leading-none font-extrabold text-white/50"
+            >
+              &ldquo;
+            </motion.span>
+            <p className="mt-2 max-w-xl font-serif text-3xl leading-[1.15] font-bold tracking-[-0.01em] text-white uppercase sm:text-[40px]">
+              <BlurWords text={verse} />{" "}
+              <span className="text-brand">
+                <BlurWords text={verseHighlight} />
+              </span>
+            </p>
+            <footer className="mt-3 font-serif text-3xl leading-[1.15] font-normal italic text-white/80 uppercase sm:text-[40px]">
+              <cite>
+                <BlurWords text={citation} />
+              </cite>
+            </footer>
+          </motion.blockquote>
 
-        <div className="relative">
-          <TiltedAccent className="rounded-[24px]" />
-          <Image
-            src="/images/cross_image.png"
-            alt="A wooden cross silhouetted against the sun above a hillside fence, with mountains in the distance"
-            width={1280}
-            height={853}
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="relative h-auto w-full rounded-[24px] shadow-[0_18px_40px_-12px_rgba(1,20,45,0.6)]"
-          />
+          <div className="relative">
+            <TiltedAccent className="rounded-[24px]" />
+            <Image
+              src="/images/cross_image.png"
+              alt="A wooden cross silhouetted against the sun above a hillside fence, with mountains in the distance"
+              width={1280}
+              height={853}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="relative h-auto w-full rounded-[24px] shadow-[0_18px_40px_-12px_rgba(1,20,45,0.6)]"
+            />
+          </div>
         </div>
       </div>
     </section>

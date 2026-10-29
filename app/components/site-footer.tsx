@@ -111,9 +111,24 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <p className="mt-12 text-center sm:mt-16 text-sm text-foreground/40">
-          © <CopyrightYear /> Saken&apos;s Pressure Washing LLC. All rights reserved.
-        </p>
+        {/* Copyright centered, with the site credit tucked into the bottom-right corner; stacked on
+            phones. */}
+        <div className="mt-12 grid gap-2 text-center text-sm text-foreground/40 sm:mt-16 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
+          <p className="sm:col-start-2">
+            © <CopyrightYear /> Saken&apos;s Pressure Washing LLC. All rights reserved.
+          </p>
+          <p className="sm:text-right">
+            by{" "}
+            <a
+              href="https://lukebaber.com"
+              target="_blank"
+              rel="noopener"
+              className="underline-offset-4 transition-colors hover:text-brand-foreground hover:underline"
+            >
+              Luke Baber
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

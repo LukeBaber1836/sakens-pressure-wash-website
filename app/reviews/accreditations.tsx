@@ -5,6 +5,7 @@ import { motion, MotionConfig, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { TbShieldCheckFilled, TbStarFilled } from "react-icons/tb";
+import { Eyebrow } from "../components/eyebrow";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -20,7 +21,8 @@ const stagger: Variants = {
   show: { transition: { staggerChildren: 0.1 } },
 };
 
-const badges: { mark: ReactNode; title: string; text?: string }[] = [
+// `note` trails the title in muted text, like the review count after a rating.
+const badges: { mark: ReactNode; title: string; note?: string }[] = [
   {
     mark: (
       <Image
@@ -60,7 +62,7 @@ const badges: { mark: ReactNode; title: string; text?: string }[] = [
       </span>
     ),
     title: "5.0 on Google",
-    text: "Rated five stars across 132 reviews.",
+    note: "(132)",
   },
   {
     mark: (
@@ -69,7 +71,6 @@ const badges: { mark: ReactNode; title: string; text?: string }[] = [
       </span>
     ),
     title: "Fully insured",
-    text: "Licensed and insured on every job, big or small.",
   },
 ];
 
@@ -89,9 +90,7 @@ export function Accreditations() {
             variants={fadeUp}
             className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center"
           >
-            <p className="text-sm font-bold tracking-[0.12em] text-brand uppercase">
-              Trusted &amp; accredited
-            </p>
+            <Eyebrow>Trusted &amp; accredited</Eyebrow>
             <h2
               id="accreditations-heading"
               className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
@@ -101,7 +100,7 @@ export function Accreditations() {
           </motion.div>
 
           <ul className="mt-12 grid gap-x-8 gap-y-12 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
-            {badges.map(({ mark, title, text }) => (
+            {badges.map(({ mark, title, note }) => (
               <motion.li
                 key={title}
                 variants={fadeUp}
@@ -110,12 +109,13 @@ export function Accreditations() {
                 <div className="grid h-20 place-items-center">{mark}</div>
                 <h3 className="mt-5 text-lg leading-tight font-bold text-brand-foreground">
                   {title}
+                  {note && (
+                    <span className="font-normal text-foreground/55">
+                      {" "}
+                      {note}
+                    </span>
+                  )}
                 </h3>
-                {text && (
-                  <p className="mt-2 text-[15px] leading-relaxed text-foreground/70">
-                    {text}
-                  </p>
-                )}
               </motion.li>
             ))}
           </ul>
