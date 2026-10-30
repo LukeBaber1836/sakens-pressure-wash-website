@@ -8,11 +8,11 @@ import { faqs } from "./services-content";
 export function Faq() {
   return (
     <section aria-labelledby="faq-heading" className="bg-white">
-      <div className="site-container py-20 [--site-max:52rem] sm:py-26">
+      <div className="site-container py-20 [--site-max:52rem] sm:py-26 2xl:[--site-max:60rem]">
         <div className="flex flex-col items-center gap-4 text-center">
           <h2
             id="faq-heading"
-            className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+            className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
           >
             FAQ
           </h2>
@@ -25,9 +25,9 @@ export function Faq() {
               className="rounded-2xl bg-white ring-1 ring-brand-foreground/10 transition-shadow data-open:shadow-[0_18px_40px_-24px_rgba(1,20,45,0.35)]"
             >
               <Accordion.Header>
-                <Accordion.Trigger className="group flex w-full items-center justify-between gap-6 rounded-2xl px-6 py-5 text-left text-lg font-bold text-brand-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand">
+                <Accordion.Trigger className="group flex w-full items-center justify-between gap-6 rounded-2xl px-6 py-5 text-left text-lg font-bold 2xl:px-7 2xl:py-6 2xl:text-xl text-brand-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand">
                   {q}
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-tint transition-colors group-data-panel-open:bg-brand">
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bevel-light group-data-panel-open:bevel-brand">
                     <TbPlus
                       className="size-4 transition-transform duration-300 group-data-panel-open:rotate-45"
                       strokeWidth={3}
@@ -37,7 +37,7 @@ export function Faq() {
                 </Accordion.Trigger>
               </Accordion.Header>
               <Accordion.Panel className="h-(--accordion-panel-height) overflow-hidden transition-[height] duration-300 ease-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none">
-                <p className="px-6 pb-6 text-[16px] leading-relaxed text-foreground/80">
+                <p className="px-6 pb-6 text-[16px] leading-relaxed text-foreground/80 2xl:px-7 2xl:text-[18px]">
                   {a}
                 </p>
               </Accordion.Panel>

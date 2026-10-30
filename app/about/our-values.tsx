@@ -62,7 +62,7 @@ export function OurValues() {
             <motion.h2
               variants={fadeUp}
               id="values-heading"
-              className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+              className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
             >
               The same standard on every job
             </motion.h2>
@@ -83,10 +83,10 @@ export function OurValues() {
                     </Handwritten>
                   </span>
                   <div className="flex flex-col gap-1.5">
-                    <h3 className="text-xl font-bold text-brand-foreground">
+                    <h3 className="text-xl font-bold text-brand-foreground 2xl:text-2xl">
                       {title}
                     </h3>
-                    <p className="max-w-xl text-[17px] leading-relaxed text-foreground/80">
+                    <p className="max-w-xl text-[17px] leading-relaxed text-foreground/80 2xl:max-w-2xl 2xl:text-[19px]">
                       {text}
                     </p>
                   </div>

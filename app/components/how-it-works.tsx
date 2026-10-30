@@ -120,7 +120,7 @@ export function HowItWorks() {
                 <Eyebrow>How it works</Eyebrow>
                 <h2
                   id="how-it-works-heading"
-                  className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+                  className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
                 >
                   Booking Is Easy
                 </h2>
@@ -231,10 +231,10 @@ function StepItem({
         !stacked && state !== "active" && "opacity-40",
       )}
     >
-      <h3 className="text-2xl leading-[1.15] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[28px]">
+      <h3 className="text-2xl leading-[1.15] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[28px] 2xl:text-[32px]">
         {step.title}
       </h3>
-      <p className="text-base leading-relaxed text-foreground/80 sm:text-[17px]">
+      <p className="text-base leading-relaxed text-foreground/80 sm:text-[17px] 2xl:text-[19px]">
         {step.text}
       </p>
     </div>

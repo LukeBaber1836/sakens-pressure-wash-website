@@ -26,7 +26,6 @@ import {
   TbBuildingSkyscraper,
   TbCar,
   TbCheck,
-  TbCircleCheckFilled,
   TbCloudRain,
   TbCrane,
   TbDroplets,
@@ -403,7 +402,7 @@ function Progress({ step }: { step: number }) {
             <span
               className={cn(
                 "relative grid size-8 place-items-center rounded-full text-sm font-bold transition-colors duration-300",
-                done && "bg-brand text-brand-foreground",
+                done && "bevel-brand text-brand-foreground",
                 current &&
                   "bg-brand-foreground text-white ring-4 ring-brand/30",
                 !done &&
@@ -465,19 +464,10 @@ function TypeStep({
                 data-field={i === 0 ? "propertyType" : undefined}
                 className="sr-only"
               />
-              <TbCircleCheckFilled
-                aria-hidden="true"
-                className={cn(
-                  "absolute top-3 right-3 size-5 text-brand sm:top-4 sm:right-4 sm:size-6 transition-all duration-200",
-                  selected ? "scale-100 opacity-100" : "scale-50 opacity-0",
-                )}
-              />
               <span
                 className={cn(
-                  "grid size-12 place-items-center rounded-2xl transition-colors sm:size-16 duration-200",
-                  selected
-                    ? "bg-brand text-brand-foreground"
-                    : "bg-tint text-brand-foreground",
+                  "grid size-12 place-items-center rounded-2xl text-brand-foreground sm:size-16",
+                  selected ? "bevel-brand" : "bevel-tint",
                 )}
               >
                 <Icon className="size-6 sm:size-8" />
@@ -638,7 +628,7 @@ function ServicesStep({ data, errors, update }: StepProps) {
                     className={cn(
                       "grid size-5 shrink-0 place-items-center rounded-md transition-colors duration-200",
                       checked
-                        ? "bg-brand text-brand-foreground"
+                        ? "bevel-brand text-brand-foreground"
                         : "bg-white ring-1 ring-brand-foreground/25",
                     )}
                   >

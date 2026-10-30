@@ -93,7 +93,7 @@ export function Accreditations() {
             <Eyebrow>Trusted &amp; accredited</Eyebrow>
             <h2
               id="accreditations-heading"
-              className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+              className="text-balance text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
             >
               Backed by More Than Our Word
             </h2>
@@ -107,7 +107,7 @@ export function Accreditations() {
                 className="flex flex-col items-center text-center"
               >
                 <div className="grid h-20 place-items-center">{mark}</div>
-                <h3 className="mt-5 text-lg leading-tight font-bold text-brand-foreground">
+                <h3 className="mt-5 text-lg leading-tight font-bold text-brand-foreground 2xl:text-xl">
                   {title}
                   {note && (
                     <span className="font-normal text-foreground/55">

@@ -64,13 +64,13 @@ export function MissionStatement() {
             >
               &ldquo;
             </motion.span>
-            <p className="mt-2 max-w-xl font-serif text-3xl leading-[1.15] font-bold tracking-[-0.01em] text-white uppercase sm:text-[40px]">
+            <p className="mt-2 max-w-xl font-serif text-3xl leading-[1.15] font-bold tracking-[-0.01em] text-white uppercase sm:text-[40px] 2xl:max-w-2xl 2xl:text-[48px]">
               <BlurWords text={verse} />{" "}
               <span className="text-brand">
                 <BlurWords text={verseHighlight} />
               </span>
             </p>
-            <footer className="mt-3 font-serif text-3xl leading-[1.15] font-normal italic text-white/80 uppercase sm:text-[40px]">
+            <footer className="mt-3 font-serif text-3xl leading-[1.15] font-normal italic text-white/80 uppercase sm:text-[40px] 2xl:text-[48px]">
               <cite>
                 <BlurWords text={citation} />
               </cite>

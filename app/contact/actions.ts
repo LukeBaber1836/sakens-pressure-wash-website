@@ -1,6 +1,12 @@
 "use server";
 
+import { SeverityNumber } from "@opentelemetry/api-logs";
+import { after } from "next/server";
 import { Resend } from "resend";
+import {
+  flushPostHogLogs,
+  getPostHogLogLogger,
+} from "../../instrumentation";
 import { servicesFor, validate, type QuoteData } from "./quote";
 import {
   quoteEmailHtml,
@@ -30,15 +36,37 @@ export async function sendQuote(data: QuoteData): Promise<SendQuoteResult> {
   if (invalid || services.length !== data.services.length)
     return { ok: false, error: "Some of your details look incomplete." };
 
+  const commercial = data.propertyType === "commercial";
+  const logQuoteEmailOutcome = (
+    status: "configuration_missing" | "delivery_failed" | "sent",
+    severityNumber: SeverityNumber,
+  ) => {
+    const logger = getPostHogLogLogger();
+    if (!logger) return;
+
+    logger.emit({
+      body: "Quote request email processing completed",
+      severityNumber,
+      attributes: {
+        event: "quote_request_email",
+        status,
+        property_type: data.propertyType,
+        service_count: services.length,
+        commercial,
+      },
+    });
+    after(flushPostHogLogs);
+  };
+
   const { RESEND_API_KEY, QUOTE_TO_EMAIL, QUOTE_FROM_EMAIL } = process.env;
   if (!RESEND_API_KEY || !QUOTE_TO_EMAIL || !QUOTE_FROM_EMAIL) {
+    logQuoteEmailOutcome("configuration_missing", SeverityNumber.ERROR);
     console.error(
       "Quote email is not configured: set RESEND_API_KEY, QUOTE_TO_EMAIL and QUOTE_FROM_EMAIL.",
     );
     return { ok: false, error: FAILED };
   }
 
-  const commercial = data.propertyType === "commercial";
   const quote: QuoteEmail = {
     commercial,
     businessName: commercial ? data.businessName.trim() : "",
@@ -59,8 +87,10 @@ export async function sendQuote(data: QuoteData): Promise<SendQuoteResult> {
     html: quoteEmailHtml(quote),
   });
   if (error) {
+    logQuoteEmailOutcome("delivery_failed", SeverityNumber.ERROR);
     console.error("Resend failed to send a quote request:", error);
     return { ok: false, error: FAILED };
   }
+  logQuoteEmailOutcome("sent", SeverityNumber.INFO);
   return { ok: true };
 }

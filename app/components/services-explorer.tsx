@@ -153,7 +153,7 @@ export function ServicesExplorer({ linkTo }: { linkTo?: CardLinkTarget }) {
                   <motion.span
                     layoutId={thumbId}
                     transition={slide}
-                    className="absolute inset-0 rounded-full bg-brand-foreground"
+                    className="absolute inset-0 rounded-full bevel-navy"
                   />
                 )}
                 <span className="relative">{label}</span>

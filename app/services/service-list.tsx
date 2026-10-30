@@ -75,7 +75,7 @@ export function ServiceList() {
                 <Eyebrow>{group.label}</Eyebrow>
                 <h2
                   id={`${group.id}-heading`}
-                  className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+                  className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
                 >
                   {group.title}
                 </h2>
@@ -198,8 +198,8 @@ function ServiceCard({ service }: { service: ServiceDetail }) {
             "rounded-full px-3 py-1 text-xs font-bold tracking-[0.08em] uppercase",
             // Orange for soft washing; a soft navy wash for anything pressure washed.
             service.method === "soft"
-              ? "bg-brand text-brand-foreground"
-              : "bg-brand-foreground/8 text-brand-foreground",
+              ? "bevel-brand text-brand-foreground"
+              : "bevel-light text-brand-foreground",
           )}
         >
           {methodLabels[service.method]}
@@ -228,7 +228,7 @@ function IncludesList({ items }: { items: readonly string[] }) {
           key={item}
           className="flex items-start gap-3 text-[15px] text-foreground/85"
         >
-          <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground">
+          <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bevel-brand text-brand-foreground">
             <TbCheck className="size-3.5" strokeWidth={3} aria-hidden="true" />
           </span>
           {item}
@@ -249,7 +249,7 @@ function ServicePhoto({
   className?: string;
 }) {
   const label =
-    "absolute rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-bold tracking-[0.1em] text-white uppercase backdrop-blur-sm";
+    "absolute rounded-full px-2.5 py-1 text-[11px] font-bold tracking-[0.1em] uppercase backdrop-blur-sm";
   const firstHalf = "top-3 left-3";
   const secondHalf =
     photo.beforeAfter === "side"
@@ -271,7 +271,11 @@ function ServicePhoto({
         <>
           <span
             aria-hidden="true"
-            className={cn(label, photo.afterFirst ? secondHalf : firstHalf)}
+            className={cn(
+              label,
+              "bevel-dark text-white",
+              photo.afterFirst ? secondHalf : firstHalf,
+            )}
           >
             Before
           </span>
@@ -279,7 +283,7 @@ function ServicePhoto({
             aria-hidden="true"
             className={cn(
               label,
-              "bg-brand text-brand-foreground",
+              "bevel-brand text-brand-foreground",
               photo.afterFirst ? firstHalf : secondHalf,
             )}
           >
@@ -303,20 +307,20 @@ function HoaCallout() {
       <div className="flex flex-col items-start">
         <h2
           id="hoa-heading"
-          className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] sm:text-[44px]"
+          className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] sm:text-[44px] 2xl:text-[52px]"
         >
           {hoaPackage.title}
         </h2>
-        <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-white/80">
+        <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-white/80 2xl:max-w-2xl 2xl:text-[19px]">
           {hoaPackage.summary}
         </p>
         <ul className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
           {hoaPackage.includes.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-3 text-[15px] text-white/90"
+              className="flex items-start gap-3 text-[15px] text-white/90 2xl:text-[17px]"
             >
-              <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground">
+              <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bevel-brand text-brand-foreground">
                 <TbCheck
                   className="size-3.5"
                   strokeWidth={3}

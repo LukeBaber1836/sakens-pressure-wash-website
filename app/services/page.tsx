@@ -21,10 +21,10 @@ export default function ServicesPage() {
           aria-labelledby="services-heading"
           className="site-container pt-10 pb-20 sm:pt-16 sm:pb-26"
         >
-          <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
+          <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center 2xl:max-w-4xl">
             <h1
               id="services-heading"
-              className="text-5xl leading-[1.02] font-extrabold tracking-[-0.025em] text-brand-foreground sm:text-[60px]"
+              className="text-5xl leading-[1.02] font-extrabold tracking-[-0.025em] text-balance text-brand-foreground sm:text-[60px] 2xl:text-[68px]"
             >
               From the roof down to the sidewalk
             </h1>

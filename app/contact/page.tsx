@@ -29,7 +29,7 @@ export default function ContactPage() {
             </Eyebrow>
             <h1
               id="quote-heading"
-              className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+              className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
             >
               Request a Price
             </h1>

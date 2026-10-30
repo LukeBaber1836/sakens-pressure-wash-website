@@ -255,10 +255,12 @@ function Hotspot({
             aria-hidden="true"
             animate={{ rotate: open ? 45 : 0, scale: open ? 1.12 : 1 }}
             className={cn(
-              "relative grid size-7 place-items-center rounded-full shadow-[0_4px_14px_rgba(1,20,45,0.35)] ring-2 ring-white transition-colors",
+              // Top-lit gradients like the brand button, built from Tailwind classes rather than the bevel
+              // utilities so the inset highlight stacks with the white ring and drop shadow.
+              "relative grid size-7 place-items-center rounded-full bg-linear-to-b shadow-[0_4px_14px_rgba(1,20,45,0.35)] ring-2 ring-white inset-shadow-[0_1px_0_rgb(255_255_255/0.35)]",
               open
-                ? "bg-brand text-brand-foreground"
-                : "bg-[color-mix(in_oklch,var(--primary)_55%,white)] text-white",
+                ? "from-[color-mix(in_oklch,var(--brand),white_22%)] to-[color-mix(in_oklch,var(--brand),black_8%)] text-brand-foreground"
+                : "from-[color-mix(in_oklch,var(--primary)_45%,white)] to-[color-mix(in_oklch,var(--primary)_62%,white)] text-white",
             )}
           >
             <TbPlus className="size-4" strokeWidth={3} />
