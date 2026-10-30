@@ -34,14 +34,14 @@ export function Reviews({ lead = false }: { lead?: boolean }) {
           <Eyebrow>Reviews</Eyebrow>
           <Heading
             id="reviews-heading"
-            className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+            className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
           >
             Locals Trust Us
           </Heading>
         </motion.div>
 
         {/* Columns scroll at different speeds; the mask fades cards in and out at the top and bottom. */}
-        <div className="mt-10 flex max-h-[740px] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)] sm:mt-12">
+        <div className="mt-10 flex max-h-[740px] justify-center gap-6 2xl:max-h-[840px] 2xl:gap-8 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)] sm:mt-12">
           {columns.map((column, i) => (
             <ReviewsColumn key={i} {...column} />
           ))}

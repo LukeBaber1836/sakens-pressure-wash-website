@@ -80,7 +80,7 @@ export function WorkHero({ photoCount }: { photoCount: number }) {
         >
           {/* The video's first frame, preloaded, showing through until the video can play. */}
           <Image
-            src="/images/roof-360-poster.webp"
+            src="/images/roof-wash-brick-ranch-poster.webp"
             alt=""
             fill
             preload
@@ -89,7 +89,7 @@ export function WorkHero({ photoCount }: { photoCount: number }) {
           />
           <video
             className="absolute inset-0 h-full w-full object-cover"
-            src="/videos/roof_360.webm"
+            src="/videos/roof_wash_brick_ranch_with_truck_and_trailer_rig.webm"
             autoPlay
             muted
             loop
@@ -98,14 +98,14 @@ export function WorkHero({ photoCount }: { photoCount: number }) {
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,20,45,0.82)_0%,rgba(1,20,45,0.55)_42%,rgba(1,20,45,0.05)_75%)]" />
 
-          <div className="relative z-10 flex flex-1 flex-col justify-center gap-6 px-6 pt-12 pb-44 text-white sm:w-[680px] sm:px-16 sm:pb-24">
+          <div className="relative z-10 flex flex-1 flex-col justify-center gap-6 px-6 pt-12 pb-44 text-white sm:w-[680px] sm:px-16 sm:pb-24 2xl:w-[820px]">
             <Eyebrow>
               Our work
             </Eyebrow>
-            <h1 className="text-5xl leading-[1.02] font-extrabold tracking-[-0.025em] sm:text-[55px]">
+            <h1 className="text-5xl leading-[1.02] font-extrabold tracking-[-0.025em] text-balance sm:text-[55px] 2xl:text-[68px]">
               See the difference for yourself
             </h1>
-            <p className="max-w-lg text-[17px] leading-relaxed text-white/85">
+            <p className="max-w-lg text-[17px] leading-relaxed text-white/85 2xl:max-w-xl 2xl:text-[19px]">
               Houses, driveways, patios, windows and storefronts we&apos;ve
               cleaned around Tyler and East Texas.
             </p>

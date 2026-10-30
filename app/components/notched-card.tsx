@@ -167,12 +167,14 @@ export function NotchedCard({
       >
         {children}
         {/* Inset shadow: a blurred stroke along the outline, its outer half clipped by the card's outline.
-            Nudged down so it gathers along the top edges, like an inset box-shadow with a y offset. */}
+            Nudged down so it gathers along the top edges, like an inset box-shadow with a y offset.
+            Kept on its own layer so the 40px blur is drawn once, not again every time something else
+            in the card repaints over the playing video. */}
         <svg
           ref={shadowRef}
           aria-hidden="true"
           preserveAspectRatio="none"
-          className="pointer-events-none absolute inset-0 size-full"
+          className="pointer-events-none absolute inset-0 size-full will-change-transform"
         >
           <filter
             id={shadowFilterId}

@@ -3,6 +3,7 @@
 import { useState, type FocusEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import posthog from "posthog-js";
 import {
   AnimatePresence,
   motion,
@@ -126,6 +127,14 @@ export function ServicesScene({
             onOpen={() => setActive(service.id)}
             onClose={() => close(service.id)}
             link={cardLinks[linkTo](service.id)}
+            onEstimateStart={
+              linkTo === "estimate"
+                ? () =>
+                    posthog.capture("service_estimate_started", {
+                      service_id: service.id,
+                    })
+                : undefined
+            }
           />
         ))}
       </div>
@@ -150,7 +159,7 @@ export function ServicesScene({
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-semibold ring-1 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand",
                 active === service.id
-                  ? "bg-brand-foreground text-white ring-brand-foreground"
+                  ? "bevel-navy text-white ring-transparent"
                   : "bg-white text-brand-foreground ring-brand-foreground/15 hover:bg-tint",
               )}
             >
@@ -191,6 +200,7 @@ function Hotspot({
   onOpen,
   onClose,
   link,
+  onEstimateStart,
 }: {
   service: ServiceHotspot;
   link: { href: string; label: string };
@@ -198,6 +208,7 @@ function Hotspot({
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
+  onEstimateStart?: () => void;
 }) {
   const panelId = `service-${service.id}`;
   const below = service.y < 35;
@@ -244,10 +255,12 @@ function Hotspot({
             aria-hidden="true"
             animate={{ rotate: open ? 45 : 0, scale: open ? 1.12 : 1 }}
             className={cn(
-              "relative grid size-7 place-items-center rounded-full shadow-[0_4px_14px_rgba(1,20,45,0.35)] ring-2 ring-white transition-colors",
+              // Top-lit gradients like the brand button, built from Tailwind classes rather than the bevel
+              // utilities so the inset highlight stacks with the white ring and drop shadow.
+              "relative grid size-7 place-items-center rounded-full bg-linear-to-b shadow-[0_4px_14px_rgba(1,20,45,0.35)] ring-2 ring-white inset-shadow-[0_1px_0_rgb(255_255_255/0.35)]",
               open
-                ? "bg-brand text-brand-foreground"
-                : "bg-[color-mix(in_oklch,var(--primary)_55%,white)] text-white",
+                ? "from-[color-mix(in_oklch,var(--brand),white_22%)] to-[color-mix(in_oklch,var(--brand),black_8%)] text-brand-foreground"
+                : "from-[color-mix(in_oklch,var(--primary)_45%,white)] to-[color-mix(in_oklch,var(--primary)_62%,white)] text-white",
             )}
           >
             <TbPlus className="size-4" strokeWidth={3} />
@@ -282,6 +295,7 @@ function Hotspot({
             </p>
             <Link
               href={link.href}
+              onClick={onEstimateStart}
               className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-brand-foreground underline-offset-4 hover:underline"
             >
               {link.label}

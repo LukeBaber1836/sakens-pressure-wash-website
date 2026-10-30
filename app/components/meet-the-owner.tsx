@@ -62,7 +62,7 @@ export function MeetTheOwner({ lead = false }: { lead?: boolean }) {
               // Kept smaller on the homepage card so the section doesn't run too tall.
               className={cn(
                 "relative mx-auto w-full max-w-md",
-                lead && "lg:max-w-none",
+                lead ? "lg:max-w-none" : "2xl:max-w-lg",
               )}
             >
               <TiltedAccent className="rounded-[28px]" />
@@ -84,13 +84,17 @@ export function MeetTheOwner({ lead = false }: { lead?: boolean }) {
               <Heading
                 variants={fadeUp}
                 id="about-heading"
-                className="mt-3 text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+                // As the About page's headline it steps up to match the other pages' heroes.
+                className={cn(
+                  "mt-3 text-balance text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]",
+                  lead && "lg:text-[52px] 2xl:text-[64px]",
+                )}
               >
                 A Tyler native who does the job right
               </Heading>
               <motion.div
                 variants={fadeUp}
-                className="mt-5 flex max-w-xl flex-col gap-4 text-[17px] leading-relaxed text-foreground/80"
+                className="mt-5 flex max-w-xl flex-col gap-4 text-[17px] leading-relaxed 2xl:max-w-2xl 2xl:text-[19px] text-foreground/80"
               >
                 <p>
                   Saken grew up in Tyler, graduated from UT Tyler, and started

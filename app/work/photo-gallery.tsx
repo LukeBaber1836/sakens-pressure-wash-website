@@ -123,7 +123,7 @@ export function PhotoGallery() {
                 aria-pressed={filter === id}
                 onClick={() => choose(id)}
                 className={cn(
-                  "flex h-10 items-center gap-2 rounded-full px-4 text-sm font-bold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand",
+                  "flex h-10 items-center gap-2 rounded-full px-4 text-sm font-bold transition-colors 2xl:h-11 2xl:px-5 2xl:text-base outline-none focus-visible:ring-2 focus-visible:ring-brand",
                   filter === id
                     ? "bg-brand-foreground text-white"
                     : "bg-secondary text-brand-foreground hover:bg-tint",

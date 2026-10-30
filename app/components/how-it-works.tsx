@@ -112,15 +112,15 @@ export function HowItWorks() {
         {/* Tall track for the pinned layout to scroll through; a third of it per step. */}
         <div ref={trackRef} className="relative h-[300vh]">
           {/* The pinned panel is the card: held a gutter in from the top and bottom of the screen so
-              its rounded corners stay in view, and edge to edge on phones. */}
-          <div className="sticky top-0 h-svh bg-tint sm:top-4 sm:h-[calc(100svh-2rem)] sm:rounded-[32px]">
+              its rounded corners stay in view, and edge to edge on phones. On desktop it is shorter and centered. */}
+          <div className="sticky top-0 h-svh bg-tint sm:top-4 sm:h-[calc(100svh-2rem)] sm:rounded-[32px] lg:top-[10svh] lg:h-[80svh]">
             {/* Below lg the top padding clears the floating nav. */}
             <div className="site-container flex h-full flex-col justify-center pt-20 pb-6 lg:pt-6 lg:pb-0">
               <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
                 <Eyebrow>How it works</Eyebrow>
                 <h2
                   id="how-it-works-heading"
-                  className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+                  className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
                 >
                   Booking Is Easy
                 </h2>
@@ -165,7 +165,7 @@ export function HowItWorks() {
 
                 {/* The illustration panel, swapped to the active step. Capped by the screen height so the
                   pinned section always fits; below lg it sits under the step's text. */}
-                <div className="relative mx-auto w-full max-w-[calc((100svh-24rem)*1.5)] sm:max-w-[calc((100svh-26rem)*1.5)] lg:mx-0 lg:max-w-[calc((100svh-17rem)*1.5)] lg:justify-self-end">
+                <div className="relative mx-auto w-full max-w-[calc((100svh-24rem)*1.5)] sm:max-w-[calc((100svh-26rem)*1.5)] lg:mx-0 lg:max-w-[calc((80svh-15rem)*1.5)] lg:justify-self-end">
                   {/* Leans the other way on the middle step, then back. */}
                   <TiltedAccent
                     className="rounded-[32px]"
@@ -231,10 +231,10 @@ function StepItem({
         !stacked && state !== "active" && "opacity-40",
       )}
     >
-      <h3 className="text-2xl leading-[1.15] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[28px]">
+      <h3 className="text-2xl leading-[1.15] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[28px] 2xl:text-[32px]">
         {step.title}
       </h3>
-      <p className="text-base leading-relaxed text-foreground/80 sm:text-[17px]">
+      <p className="text-base leading-relaxed text-foreground/80 sm:text-[17px] 2xl:text-[19px]">
         {step.text}
       </p>
     </div>

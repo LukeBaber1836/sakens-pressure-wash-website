@@ -22,7 +22,7 @@ function ReviewCard({ review, duplicate }: { review: Review; duplicate?: boolean
   return (
     <figure
       aria-hidden={duplicate || undefined}
-      className="w-full max-w-xs rounded-3xl bg-white p-7 shadow-[0_18px_40px_-24px_rgba(1,20,45,0.35)] ring-1 ring-brand-foreground/10">
+      className="w-full max-w-xs rounded-3xl bg-white p-7 2xl:max-w-sm 2xl:p-8 shadow-[0_18px_40px_-24px_rgba(1,20,45,0.35)] ring-1 ring-brand-foreground/10">
       <div className="flex gap-0.5 text-brand" role="img" aria-label={`${review.rating} out of 5 stars`}>
         {Array.from({ length: 5 }, (_, i) => (
           <TbStarFilled
@@ -32,7 +32,7 @@ function ReviewCard({ review, duplicate }: { review: Review; duplicate?: boolean
           />
         ))}
       </div>
-      <blockquote className="mt-4 text-[15px] leading-relaxed text-foreground/80">
+      <blockquote className="mt-4 text-[15px] leading-relaxed 2xl:text-[17px] text-foreground/80">
         {review.text}
       </blockquote>
       <figcaption className="mt-5 flex items-center gap-3">

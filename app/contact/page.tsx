@@ -20,7 +20,7 @@ export default function ContactPage() {
           aria-labelledby="quote-heading"
           // Top space grows with the screen height so tall screens don't pin the form to the top.
           // Not true centering: that would shift the header every time a step changes height.
-          className="group/quote site-container py-14 [--site-max:52rem] sm:pt-[clamp(5rem,14svh,12rem)] sm:pb-20"
+          className="group/quote site-container py-14 [--site-max:52rem] sm:pt-[clamp(2.5rem,6svh,5rem)] sm:pb-20"
         >
           {/* The confirmation stands on its own, so the heading goes once the request is sent. */}
           <div className="flex flex-col gap-4 text-center group-has-[[data-submitted]]/quote:hidden">
@@ -29,7 +29,7 @@ export default function ContactPage() {
             </Eyebrow>
             <h1
               id="quote-heading"
-              className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px]"
+              className="text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]"
             >
               Request a Price
             </h1>
