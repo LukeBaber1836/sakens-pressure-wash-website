@@ -159,7 +159,7 @@ export function ServicesScene({
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-semibold ring-1 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand",
                 active === service.id
-                  ? "bg-brand-foreground text-white ring-brand-foreground"
+                  ? "bevel-navy text-white ring-transparent"
                   : "bg-white text-brand-foreground ring-brand-foreground/15 hover:bg-tint",
               )}
             >

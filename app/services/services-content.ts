@@ -242,7 +242,6 @@ export const methods = [
   {
     id: "soft",
     name: "Soft wash",
-    tagline: "Low pressure, cleaning solution does the work",
     text: "A gentle spray of cleaning solution kills algae, mold and mildew at the root, then a low-pressure rinse carries it away. It cleans deeper than pressure alone and lasts longer, without damaging delicate surfaces.",
     usedOn: [
       "Roofs",
@@ -255,7 +254,6 @@ export const methods = [
   {
     id: "pressure",
     name: "Pressure wash",
-    tagline: "High pressure for hard, durable surfaces",
     text: "High-pressure water, usually through a spinning surface cleaner, strips ground-in dirt, oil and gum from tough surfaces evenly, without the stripes a wand alone leaves behind.",
     usedOn: [
       "Driveways",

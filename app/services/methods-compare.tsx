@@ -41,20 +41,15 @@ export function MethodsCompare() {
                   key={method.id}
                   className="flex flex-col rounded-[28px] bg-white p-7 shadow-[0_18px_40px_-24px_rgba(1,20,45,0.35)] ring-1 ring-brand-foreground/10 sm:p-9 2xl:p-11"
                 >
-                  {/* The icon sits beside the name and tagline as one header. */}
+                  {/* The icon sits beside the name as one header. */}
                   <div className="flex items-center gap-4">
                     <Icon
                       className={cn("size-10 shrink-0", accent)}
                       aria-hidden="true"
                     />
-                    <div>
-                      <h3 className="text-2xl font-extrabold text-brand-foreground 2xl:text-[28px]">
-                        {method.name}
-                      </h3>
-                      <p className={cn("mt-0.5 text-sm font-bold 2xl:text-base", accent)}>
-                        {method.tagline}
-                      </p>
-                    </div>
+                    <h3 className="text-2xl font-extrabold text-brand-foreground 2xl:text-[28px]">
+                      {method.name}
+                    </h3>
                   </div>
                   <p className="mt-4 text-[16px] leading-relaxed text-foreground/80 2xl:text-[18px]">
                     {method.text}
@@ -66,7 +61,7 @@ export function MethodsCompare() {
                     {method.usedOn.map((surface) => (
                       <li
                         key={surface}
-                        className="rounded-full bg-tint px-3 py-1.5 text-sm font-semibold text-brand-foreground"
+                        className="rounded-full bevel-tint px-3 py-1.5 text-sm font-semibold text-brand-foreground"
                       >
                         {surface}
                       </li>
