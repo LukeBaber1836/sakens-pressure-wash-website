@@ -2,6 +2,12 @@
 
 import { Resend } from "resend";
 import { servicesFor, validate, type QuoteData } from "./quote";
+import {
+  quoteEmailHtml,
+  quoteEmailSubject,
+  quoteEmailText,
+  type QuoteEmail,
+} from "./quote-email";
 
 export type SendQuoteResult = { ok: true } | { ok: false; error: string };
 
@@ -32,51 +38,29 @@ export async function sendQuote(data: QuoteData): Promise<SendQuoteResult> {
     return { ok: false, error: FAILED };
   }
 
-  const name = `${data.firstName.trim()} ${data.lastName.trim()}`;
   const commercial = data.propertyType === "commercial";
-  const rows: [string, string][] = [
-    ["Type", commercial ? "Commercial" : "Residential"],
-    ...(commercial
-      ? [["Business", data.businessName.trim()] as [string, string]]
-      : []),
-    ["Name", name],
-    ["Email", data.email.trim()],
-    ["Phone", data.phone.trim()],
-    [
-      "Address",
-      `${data.street.trim()}, ${data.city.trim()}, TX ${data.zip.trim()}`,
-    ],
-    ["Services", services.join(", ")],
-    ["Details", data.details.trim().slice(0, 5000) || "No extra notes."],
-  ];
-
-  const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
-  const html = `<table cellpadding="6" style="border-collapse:collapse;font-family:sans-serif;font-size:15px">${rows
-    .map(
-      ([label, value]) =>
-        `<tr><td style="color:#666;vertical-align:top">${label}</td><td style="white-space:pre-line">${escapeHtml(value)}</td></tr>`,
-    )
-    .join("")}</table>`;
+  const quote: QuoteEmail = {
+    commercial,
+    businessName: commercial ? data.businessName.trim() : "",
+    name: `${data.firstName.trim()} ${data.lastName.trim()}`,
+    email: data.email.trim(),
+    phone: data.phone.trim(),
+    address: `${data.street.trim()}, ${data.city.trim()}, ${data.state} ${data.zip.trim()}`,
+    services,
+    details: data.details.trim().slice(0, 5000),
+  };
 
   const { error } = await new Resend(RESEND_API_KEY).emails.send({
     from: QUOTE_FROM_EMAIL,
     to: QUOTE_TO_EMAIL.split(",").map((e) => e.trim()),
-    replyTo: data.email.trim(),
-    subject: `Quote request: ${commercial ? data.businessName.trim() : name}`,
-    text,
-    html,
+    replyTo: quote.email,
+    subject: quoteEmailSubject(quote),
+    text: quoteEmailText(quote),
+    html: quoteEmailHtml(quote),
   });
   if (error) {
     console.error("Resend failed to send a quote request:", error);
     return { ok: false, error: FAILED };
   }
   return { ok: true };
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }

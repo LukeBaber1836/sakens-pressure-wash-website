@@ -112,8 +112,8 @@ export function HowItWorks() {
         {/* Tall track for the pinned layout to scroll through; a third of it per step. */}
         <div ref={trackRef} className="relative h-[300vh]">
           {/* The pinned panel is the card: held a gutter in from the top and bottom of the screen so
-              its rounded corners stay in view, and edge to edge on phones. */}
-          <div className="sticky top-0 h-svh bg-tint sm:top-4 sm:h-[calc(100svh-2rem)] sm:rounded-[32px]">
+              its rounded corners stay in view, and edge to edge on phones. On desktop it is shorter and centered. */}
+          <div className="sticky top-0 h-svh bg-tint sm:top-4 sm:h-[calc(100svh-2rem)] sm:rounded-[32px] lg:top-[10svh] lg:h-[80svh]">
             {/* Below lg the top padding clears the floating nav. */}
             <div className="site-container flex h-full flex-col justify-center pt-20 pb-6 lg:pt-6 lg:pb-0">
               <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
@@ -165,7 +165,7 @@ export function HowItWorks() {
 
                 {/* The illustration panel, swapped to the active step. Capped by the screen height so the
                   pinned section always fits; below lg it sits under the step's text. */}
-                <div className="relative mx-auto w-full max-w-[calc((100svh-24rem)*1.5)] sm:max-w-[calc((100svh-26rem)*1.5)] lg:mx-0 lg:max-w-[calc((100svh-17rem)*1.5)] lg:justify-self-end">
+                <div className="relative mx-auto w-full max-w-[calc((100svh-24rem)*1.5)] sm:max-w-[calc((100svh-26rem)*1.5)] lg:mx-0 lg:max-w-[calc((80svh-15rem)*1.5)] lg:justify-self-end">
                   {/* Leans the other way on the middle step, then back. */}
                   <TiltedAccent
                     className="rounded-[32px]"

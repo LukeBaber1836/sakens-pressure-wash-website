@@ -44,7 +44,15 @@ import {
   TbWindow,
 } from "react-icons/tb";
 import type { IconType } from "react-icons";
+import posthog from "posthog-js";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Tooltip,
   TooltipContent,
@@ -54,6 +62,7 @@ import {
 import { cn } from "@/lib/utils";
 import {
   servicesFor,
+  states,
   validate,
   type Errors,
   type PropertyType,
@@ -70,6 +79,7 @@ const initialData: QuoteData = {
   phone: "",
   street: "",
   city: "",
+  state: "TX",
   zip: "",
   services: [],
   details: "",
@@ -86,6 +96,14 @@ const steps = [
   },
   { title: "Review", heading: "Look it over" },
 ] as { title: string; heading: string; optional?: boolean }[];
+
+const quoteStepNames = [
+  "property_type",
+  "contact_information",
+  "service_selection",
+  "additional_details",
+  "review",
+] as const;
 
 const propertyTypes: {
   value: PropertyType;
@@ -124,10 +142,6 @@ const serviceIcons: Record<string, IconType> = {
   "dumpster-pad": TbTrash,
   hoa: TbBuildingCommunity,
 };
-
-// TEMP: lets the progress bar jump to any step, skipping validation, to preview each screen.
-// Set to false (or delete it and the onSelect wiring) before launch.
-const PREVIEW_STEPS = true;
 
 const spring = { type: "spring", bounce: 0.1, visualDuration: 0.4 } as const;
 
@@ -191,6 +205,7 @@ export function QuoteForm({ className }: { className?: string }) {
   }
 
   function setPropertyType(type: PropertyType) {
+    posthog.capture("quote_form_started", { property_type: type });
     // The two property types offer different services, so a switch clears the old picks.
     setData((prev) =>
       prev.propertyType === type
@@ -219,6 +234,9 @@ export function QuoteForm({ className }: { className?: string }) {
       document.querySelector<HTMLElement>(`[data-field="${first}"]`)?.focus();
       return;
     }
+    posthog.capture("quote_form_step_completed", {
+      quote_step: quoteStepNames[step],
+    });
     goTo(step + 1);
   }
 
@@ -237,6 +255,11 @@ export function QuoteForm({ className }: { className?: string }) {
       setStatus("idle");
       return;
     }
+    posthog.capture("quote_request_submitted", {
+      property_type: data.propertyType,
+      service_count: data.services.length,
+      selected_services: data.services,
+    });
     moved.current = true;
     setStatus("done");
   }
@@ -254,7 +277,7 @@ export function QuoteForm({ className }: { className?: string }) {
           <Success ref={headingRef} />
         ) : (
           <form noValidate onSubmit={handleSubmit}>
-            <Progress step={step} onSelect={PREVIEW_STEPS ? goTo : undefined} />
+            <Progress step={step} />
 
             <div className="relative mt-10 sm:mt-12">
               <AnimatePresence mode="wait" initial={false} custom={direction}>
@@ -351,13 +374,7 @@ export function QuoteForm({ className }: { className?: string }) {
   );
 }
 
-function Progress({
-  step,
-  onSelect,
-}: {
-  step: number;
-  onSelect?: (step: number) => void;
-}) {
+function Progress({ step }: { step: number }) {
   return (
     <ol className="flex">
       {steps.map((s, i) => {
@@ -404,14 +421,6 @@ function Progress({
             >
               {s.title}
             </span>
-            {onSelect && (
-              <button
-                type="button"
-                aria-label={`Go to ${s.title}`}
-                onClick={() => onSelect(i)}
-                className="absolute inset-0 z-10 rounded-xl"
-              />
-            )}
           </li>
         );
       })}
@@ -543,11 +552,11 @@ function InfoStep({ data, errors, update }: StepProps) {
         </Field>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-6">
+      <div className="grid gap-5 sm:grid-cols-12">
         <Field
           label="Property address"
           error={errors.street}
-          className="sm:col-span-6"
+          className="sm:col-span-12"
         >
           <Input
             data-field="street"
@@ -556,7 +565,7 @@ function InfoStep({ data, errors, update }: StepProps) {
             onChange={(e) => update("street", e.target.value)}
           />
         </Field>
-        <Field label="City" error={errors.city} className="sm:col-span-4">
+        <Field label="City" error={errors.city} className="sm:col-span-6">
           <Input
             data-field="city"
             autoComplete="address-level2"
@@ -565,7 +574,13 @@ function InfoStep({ data, errors, update }: StepProps) {
             onChange={(e) => update("city", e.target.value)}
           />
         </Field>
-        <Field label="ZIP" error={errors.zip} className="sm:col-span-2">
+        <Field label="State" error={errors.state} className="sm:col-span-3">
+          <StateSelect
+            value={data.state}
+            onChange={(state) => update("state", state)}
+          />
+        </Field>
+        <Field label="ZIP" error={errors.zip} className="sm:col-span-3">
           <Input
             data-field="zip"
             autoComplete="postal-code"
@@ -713,7 +728,7 @@ function ReviewStep({
         <ReviewRow label="Phone" value={data.phone} />
         <ReviewRow
           label="Address"
-          value={`${data.street}, ${data.city}, TX ${data.zip}`}
+          value={`${data.street}, ${data.city}, ${data.state} ${data.zip}`}
         />
       </ReviewCard>
       <ReviewCard title="Services" onEdit={() => onEdit(2)}>
@@ -845,6 +860,38 @@ const inputClass =
 
 function Input(props: ComponentProps<"input">) {
   return <input {...props} className={cn(inputClass, props.className)} />;
+}
+
+/**
+ * The state picker. Field hands its id and aria props to this component, which passes them on to the
+ * trigger button so the label and error message stay attached.
+ */
+function StateSelect({
+  value,
+  onChange,
+  ...triggerProps
+}: Omit<ComponentProps<"button">, "value" | "onChange"> & {
+  value: string;
+  onChange: (state: string) => void;
+}) {
+  return (
+    <Select
+      value={value}
+      onValueChange={onChange}
+      autoComplete="address-level1"
+    >
+      <SelectTrigger data-field="state" {...triggerProps}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {states.map((s) => (
+          <SelectItem key={s.code} value={s.code}>
+            {s.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 }
 
 /** Label, control, and error message. The control is cloned with the matching id and aria props. */

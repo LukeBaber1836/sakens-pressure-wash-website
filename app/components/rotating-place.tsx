@@ -68,7 +68,9 @@ export function RotatingPlace({ running = true }: { running?: boolean }) {
             animate={{ opacity: 1, y: "0em", filter: "blur(0px)" }}
             exit={hidden(-1)}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="whitespace-nowrap [grid-area:1/1]"
+            // Its own layer, so each frame of the blur repaints just the word rather than the whole
+            // hero card around it, video and shadow included.
+            className="whitespace-nowrap will-change-[transform,opacity,filter] [grid-area:1/1]"
           >
             {places[index]}
           </motion.span>

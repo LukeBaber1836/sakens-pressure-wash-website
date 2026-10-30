@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
+import posthog from "posthog-js";
 import { cn } from "@/lib/utils";
 import { DoodleCallout } from "./doodle-callout";
 import { commercialServices, houseServices } from "./services-breakdown-data";
@@ -117,6 +118,14 @@ export function ServicesExplorer({ linkTo }: { linkTo?: CardLinkTarget }) {
   // stays mounted in the background, whenever another page showed its own.
   const thumbId = `property-type-thumb-${useId()}`;
 
+  function selectPropertyType(nextType: PropertyType) {
+    if (nextType === type) return;
+    posthog.capture("service_category_selected", {
+      property_type: nextType,
+    });
+    setType(nextType);
+  }
+
   return (
     <MotionConfig reducedMotion="user">
       {/* Stacked above the scene, which tucks its empty sky up underneath. */}
@@ -132,7 +141,7 @@ export function ServicesExplorer({ linkTo }: { linkTo?: CardLinkTarget }) {
                 key={id}
                 type="button"
                 aria-pressed={type === id}
-                onClick={() => setType(id)}
+                onClick={() => selectPropertyType(id)}
                 className={cn(
                   "relative rounded-full px-5 py-2 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand",
                   type === id
