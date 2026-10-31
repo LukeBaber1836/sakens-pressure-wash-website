@@ -62,7 +62,7 @@ const badges: { mark: ReactNode; title: string; note?: string }[] = [
       </span>
     ),
     title: "5.0 on Google",
-    note: "(132)",
+    note: "(85)",
   },
   {
     mark: (

@@ -50,12 +50,12 @@ export function TrustPill({ show = true }: { show?: boolean }) {
         variants={pill}
         initial="hidden"
         animate={show ? "show" : "hidden"}
-        className="glass relative flex w-full flex-wrap items-center gap-x-8 gap-y-3 rounded-[28px] px-4 py-4 text-brand-foreground [--glass-opacity:0.7] sm:px-8 sm:py-5 md:w-fit"
+        className="glass relative flex w-full flex-wrap items-center gap-x-8 gap-y-3 rounded-[28px] px-4 py-4 text-brand-foreground [--glass-opacity:0.7] sm:px-8 sm:py-5 md:w-fit 2xl:gap-x-10 2xl:rounded-[34px] 2xl:px-10 2xl:py-6"
       >
-        <motion.div variants={fadeUp} className="flex items-center gap-3">
+        <motion.div variants={fadeUp} className="flex items-center gap-3 2xl:gap-4">
           {/* The Google mark stands in for "Google", which screen readers still get. */}
-          <span className="flex items-center gap-2 text-base font-bold">
-            <FcGoogle className="size-5 shrink-0" aria-hidden="true" />
+          <span className="flex items-center gap-2 text-base font-bold 2xl:text-xl">
+            <FcGoogle className="size-5 shrink-0 2xl:size-6" aria-hidden="true" />
             <span className="sr-only">Google rating</span>
             5.0
           </span>
@@ -67,21 +67,21 @@ export function TrustPill({ show = true }: { show?: boolean }) {
           >
             {Array.from({ length: 5 }, (_, i) => (
               <motion.span key={i} variants={star} className="flex" aria-hidden="true">
-                <TbStarFilled className="size-[18px]" />
+                <TbStarFilled className="size-[18px] 2xl:size-[22px]" />
               </motion.span>
             ))}
           </motion.span>
-          <span className="text-base font-medium text-brand-foreground/60">132 reviews</span>
+          <span className="text-base font-medium text-brand-foreground/60 2xl:text-xl">85 reviews</span>
         </motion.div>
         {trustItems.map(({ label, icon: Icon }) => (
-          <motion.div key={label} variants={fadeUp} className="flex items-center gap-8">
+          <motion.div key={label} variants={fadeUp} className="flex items-center gap-8 2xl:gap-10">
             <Separator
               orientation="vertical"
-              className="hidden h-6 self-center! bg-brand-foreground/15 sm:block"
+              className="hidden h-6 self-center! bg-brand-foreground/15 sm:block 2xl:h-7"
             />
-            <span className="flex items-center gap-2.5">
-              <Icon className="size-5 shrink-0 text-brand" aria-hidden="true" />
-              <span className="text-base font-bold">{label}</span>
+            <span className="flex items-center gap-2.5 2xl:gap-3">
+              <Icon className="size-5 shrink-0 text-brand 2xl:size-6" aria-hidden="true" />
+              <span className="text-base font-bold 2xl:text-xl">{label}</span>
             </span>
           </motion.div>
         ))}

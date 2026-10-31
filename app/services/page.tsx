@@ -5,12 +5,14 @@ import { SiteNav } from "../components/site-nav";
 import { Faq } from "./faq";
 import { MethodsCompare } from "./methods-compare";
 import { ServiceList } from "./service-list";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
-  title: "Services | Saken's Pressure Washing",
+export const metadata: Metadata = pageMetadata({
+  title: "Services in Tyler & East Texas",
   description:
     "Roof cleaning, house soft washing, driveways, windows, gutters, fences and commercial pressure washing in Tyler and East Texas. Free in-person estimates.",
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (

@@ -14,9 +14,6 @@ export function ServiceArea() {
           <h2 className="text-balance text-4xl leading-[1.08] font-extrabold tracking-[-0.02em] text-brand-foreground sm:text-[44px] 2xl:text-[52px]">
             Serving Tyler and East Texas
           </h2>
-          <p className="text-[17px] leading-relaxed text-foreground/80 2xl:text-[19px]">
-            Towns we regularly serve:
-          </p>
           <ul className="grid grid-cols-2 gap-x-6 gap-y-2.5 text-[17px] font-semibold text-brand-foreground sm:grid-cols-3 2xl:gap-x-10 2xl:text-[19px]">
             {serviceTowns.map((town) => (
               <li key={town.name}>{town.name}</li>

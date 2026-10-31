@@ -1,14 +1,9 @@
 import Link from "next/link";
 import { cacheLife } from "next/cache";
-import {
-  TbArrowUpRight,
-  TbBrandFacebook,
-  TbBrandInstagram,
-  TbBrandLinkedin,
-  TbBrandYoutube,
-} from "react-icons/tb";
+import { TbArrowUpRight } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { SiteLogo } from "./site-logo";
+import { SocialLinks } from "./social-links";
 
 const linkGroups = [
   {
@@ -29,14 +24,6 @@ const linkGroups = [
   },
 ];
 
-// Profile URLs still to come; swap each "#" for the real page.
-const socials = [
-  { label: "LinkedIn", href: "#", Icon: TbBrandLinkedin },
-  { label: "Facebook", href: "#", Icon: TbBrandFacebook },
-  { label: "Instagram", href: "#", Icon: TbBrandInstagram },
-  { label: "YouTube", href: "#", Icon: TbBrandYoutube },
-];
-
 // Captured into the static shell and refreshed daily, so the year rolls over without a redeploy.
 async function CopyrightYear() {
   "use cache";
@@ -53,19 +40,7 @@ export function SiteFooter() {
             <Link href="/" aria-label="Saken's Pressure Washing home" className="w-fit">
               <SiteLogo className="text-[22px]" />
             </Link>
-            <ul className="flex gap-2">
-              {socials.map(({ label, href, Icon }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    aria-label={`Saken's Pressure Washing on ${label}`}
-                    className="grid size-10 place-items-center rounded-full text-brand-foreground/70 ring-1 ring-brand-foreground/15 transition-colors outline-none hover:bg-tint hover:text-brand-foreground focus-visible:ring-2 focus-visible:ring-brand"
-                  >
-                    <Icon className="size-5" aria-hidden="true" />
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <SocialLinks />
           </div>
 
           <nav

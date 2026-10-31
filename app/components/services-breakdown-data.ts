@@ -97,6 +97,14 @@ export const commercialServices: ServiceHotspot[] = [
     y: 55.4,
   },
   {
+    id: "parking-lot-striping",
+    name: "Parking lot striping",
+    description:
+      "Faded stall lines repainted crisp and bright, so drivers can see exactly where to park.",
+    x: 63.3,
+    y: 59.6,
+  },
+  {
     id: "post-construction",
     name: "Post-construction cleanup",
     description:

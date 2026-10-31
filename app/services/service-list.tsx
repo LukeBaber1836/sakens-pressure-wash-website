@@ -30,6 +30,7 @@ const methodLabels: Record<Method, string> = {
   soft: "Soft wash",
   pressure: "Pressure wash",
   both: "Soft & pressure wash",
+  striping: "Line painting",
 };
 
 const groups = [

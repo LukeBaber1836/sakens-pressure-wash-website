@@ -1,7 +1,7 @@
 // Copy for the Services page. Each entry's id matches services-breakdown-data, so the explorer's dots
 // can jump to it and the quote form can preselect it. Everything here is a first draft to edit.
 
-export type Method = "soft" | "pressure" | "both";
+export type Method = "soft" | "pressure" | "both" | "striping";
 
 export type ServiceDetail = {
   id: string;
@@ -183,6 +183,21 @@ export const commercialDetails: ServiceDetail[] = [
     photo: {
       src: "/images/parking-lot-night-wet-02.jpeg",
       alt: "A freshly washed concrete parking lot at night, still wet, in front of a lit building entrance",
+    },
+  },
+  {
+    id: "parking-lot-striping",
+    name: "Parking lot striping",
+    includes: [
+      "Stall lines repainted crisp and bright",
+      "Lot washed first so the paint holds",
+      "Done after hours so the lot stays open",
+    ],
+    method: "striping",
+    photo: {
+      // Stock photo, to swap for one of Saken's own jobs.
+      src: "/images/parking-lot-fresh-stripes-01.webp",
+      alt: "Freshly painted white stall lines and yellow curb stops on new black asphalt",
     },
   },
   {

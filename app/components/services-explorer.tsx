@@ -23,7 +23,8 @@ type PropertyType = "residential" | "commercial";
 const houseColors: Record<string, string> = {
   roof: "oklch(0.52 0.02 255)",
   siding: "oklch(0.86 0.05 235)",
-  windows: "oklch(0.93 0.004 250)",
+  // A light tint of the brand orange (--brand is oklch(0.79 0.155 66)).
+  windows: "oklch(0.89 0.09 66)",
   gutters: "oklch(0.66 0.08 60)",
   fence: "oklch(0.85 0.06 75)",
   patio: "oklch(0.8 0.035 65)",
@@ -73,6 +74,11 @@ const scenes: Record<PropertyType, Scene> = {
           service: "parking-lot",
           d: commercialSurfacePaths["parking-lot"],
           color: "oklch(0.5 0.008 260)",
+        },
+        {
+          service: "parking-lot-striping",
+          d: commercialSurfacePaths["parking-stripes"],
+          color: "oklch(0.88 0.17 95)",
         },
         {
           service: "post-construction",

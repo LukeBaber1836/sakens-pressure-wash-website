@@ -45,7 +45,7 @@ function ReviewCard({ review, duplicate }: { review: Review; duplicate?: boolean
         <span className="flex flex-col">
           <span className="leading-5 font-bold text-brand-foreground">{review.name}</span>
           <span className="text-sm leading-5 text-foreground/60">
-            {review.service} · {review.location}
+            {review.location ? `${review.service} · ${review.location}` : review.service}
           </span>
         </span>
       </figcaption>

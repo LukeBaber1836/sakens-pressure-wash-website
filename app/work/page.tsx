@@ -4,12 +4,14 @@ import { SiteNav } from "../components/site-nav";
 import { PhotoGallery } from "./photo-gallery";
 import { photos } from "./photos";
 import { WorkHero } from "./work-hero";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
-  title: "Our Work | Saken's Pressure Washing",
+export const metadata: Metadata = pageMetadata({
+  title: "Before & After Photos",
   description:
     "Photos from real pressure washing and soft washing jobs around Tyler and East Texas: homes, driveways, patios, windows and commercial properties.",
-};
+  path: "/work",
+});
 
 export default function WorkPage() {
   return (

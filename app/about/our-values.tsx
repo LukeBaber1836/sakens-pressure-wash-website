@@ -22,9 +22,9 @@ const values: { title: string; text: string }[] = [
   },
 ];
 
-// Seconds to write each number, and the pause before the next one starts.
+// Seconds to write each number, and the stagger between their starts (they overlap).
 const NUMBER_WRITE = 0.7;
-const NUMBER_GAP = 0.75;
+const NUMBER_STAGGER = 0.2;
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -41,7 +41,7 @@ const stagger: Variants = {
 };
 
 export function OurValues() {
-  // One trigger for all three numbers, so their hand-off timing holds however the list scrolls in.
+  // One trigger for all three numbers, so their stagger holds however the list scrolls in.
   const listRef = useRef<HTMLUListElement>(null);
   const listInView = useInView(listRef, { once: true, amount: 0.5 });
 
@@ -70,12 +70,12 @@ export function OurValues() {
             <ul ref={listRef} className="mt-10 flex flex-col gap-8">
               {values.map(({ title, text }, i) => (
                 <motion.li key={title} variants={fadeUp} className="flex gap-5">
-                  {/* Each number writes itself in by hand once the one before it is done. */}
+                  {/* Each number writes itself in by hand, a beat after the one before it. */}
                   <span aria-hidden="true" className="w-16 shrink-0">
                     <Handwritten
                       play={listInView}
                       duration={NUMBER_WRITE}
-                      delay={0.3 + i * (NUMBER_WRITE + NUMBER_GAP)}
+                      delay={NUMBER_STAGGER + i * NUMBER_STAGGER}
                       weight={1.7}
                       className="text-[46px] leading-none text-brand"
                     >

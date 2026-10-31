@@ -21,6 +21,7 @@ import {
 import {
   TbArrowLeft,
   TbArrowRight,
+  TbBrush,
   TbBuildings,
   TbBuildingCommunity,
   TbBuildingSkyscraper,
@@ -137,6 +138,7 @@ const serviceIcons: Record<string, IconType> = {
   building: TbBuildings,
   "gas-station": TbGasStation,
   "parking-lot": TbParking,
+  "parking-lot-striping": TbBrush,
   "post-construction": TbCrane,
   "dumpster-pad": TbTrash,
   hoa: TbBuildingCommunity,

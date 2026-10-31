@@ -5,12 +5,14 @@ import { ServiceArea } from "../components/service-area";
 import { SiteFooter } from "../components/site-footer";
 import { SiteNav } from "../components/site-nav";
 import { OurValues } from "./our-values";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
-  title: "About | Saken's Pressure Washing",
+export const metadata: Metadata = pageMetadata({
+  title: "About Saken Sawyer",
   description:
     "Meet Saken Sawyer, a Tyler native and UT Tyler graduate whose local crew brings excellent work, integrity and hospitality to every pressure washing job in East Texas.",
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

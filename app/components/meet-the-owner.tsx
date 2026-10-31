@@ -168,7 +168,7 @@ export function MeetTheOwner({ lead = false }: { lead?: boolean }) {
                         ))}
                       </div>
                       <p className="mt-1 text-xs text-foreground/60">
-                        <span className="sr-only">on Google, </span>132 reviews
+                        <span className="sr-only">on Google, </span>85 reviews
                       </p>
                     </div>
                   </li>

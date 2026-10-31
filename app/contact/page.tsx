@@ -3,12 +3,14 @@ import { Eyebrow } from "../components/eyebrow";
 import { SiteFooter } from "../components/site-footer";
 import { SiteNav } from "../components/site-nav";
 import { QuoteForm } from "./quote-form";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
-  title: "Free Estimate | Saken's Pressure Washing",
+export const metadata: Metadata = pageMetadata({
+  title: "Free Pressure Washing Estimate",
   description:
-    "Tell us about your property and the services you need, and Saken will follow up with a free, honest price.",
-};
+    "Request a free pressure washing estimate in Tyler and East Texas. Tell us about your property and Saken will follow up with an honest price.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

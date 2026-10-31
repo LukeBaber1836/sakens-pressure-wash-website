@@ -4,12 +4,14 @@ import { ServiceArea } from "../components/service-area";
 import { SiteFooter } from "../components/site-footer";
 import { SiteNav } from "../components/site-nav";
 import { Accreditations } from "./accreditations";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
-  title: "Reviews | Saken's Pressure Washing",
+export const metadata: Metadata = pageMetadata({
+  title: "Customer Reviews",
   description:
-    "Rated 5.0 on Google across 132 reviews. A BBB Accredited Business, Tyler Area Chamber of Commerce member, and fully insured, serving Tyler and East Texas.",
-};
+    "Rated 5.0 on Google across 85 reviews. A BBB Accredited Business, Tyler Area Chamber of Commerce member, and fully insured, serving Tyler and East Texas.",
+  path: "/reviews",
+});
 
 export default function ReviewsPage() {
   return (

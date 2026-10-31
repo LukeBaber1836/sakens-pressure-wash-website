@@ -6,12 +6,19 @@ import { Eyebrow } from "./eyebrow";
 import { ReviewsColumn } from "./reviews-column";
 import { reviews } from "./reviews-data";
 
-// The middle column runs downward, against the outer two.
-const columns = [
-  { reviews: reviews.slice(0, 3), duration: 32, direction: "up", className: undefined },
-  { reviews: reviews.slice(3, 6), duration: 40, direction: "down", className: "hidden md:block" },
-  { reviews: reviews.slice(6, 9), duration: 36, direction: "up", className: "hidden lg:block" },
+// Reviews are dealt round-robin so every column mixes long and short ones and opens on a strong one.
+// Speed is set per card, so a column's pass grows with its list instead of rushing through it. The
+// middle column runs downward, against the outer two.
+const columnSettings = [
+  { secondsPerCard: 10.5, direction: "up", className: undefined },
+  { secondsPerCard: 13, direction: "down", className: "hidden md:block" },
+  { secondsPerCard: 12, direction: "up", className: "hidden lg:block" },
 ] as const;
+
+const columns = columnSettings.map(({ secondsPerCard, ...column }, i) => {
+  const list = reviews.filter((_, r) => r % columnSettings.length === i);
+  return { ...column, reviews: list, duration: list.length * secondsPerCard };
+});
 
 /** `lead` makes this the page's opening section: less space above it, and the heading becomes the h1. */
 export function Reviews({ lead = false }: { lead?: boolean }) {
