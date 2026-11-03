@@ -6,7 +6,7 @@ import { TbBrandFacebook, TbBrandLinkedin } from "react-icons/tb";
 const socials = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/company/saken-s-pressure-washing",
+    href: "https://www.linkedin.com/in/saken-sawyer-497636394/",
     Icon: TbBrandLinkedin,
   },
   {

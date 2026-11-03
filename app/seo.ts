@@ -19,8 +19,10 @@ export const OG_IMAGE = {
   alt: "A Saken's Pressure Washing crew member washing a commercial building from a lift at sunset in East Texas",
 };
 
+/** Saken's personal LinkedIn; it describes him, so it sits on `founder` rather than the business. */
+const FOUNDER_LINKEDIN = "https://www.linkedin.com/in/saken-sawyer-497636394/";
+
 export const SOCIAL_PROFILES = [
-  "https://www.linkedin.com/company/saken-s-pressure-washing",
   "https://www.facebook.com/profile.php?id=61558036448070",
   // Google Business Profile
   "https://www.google.com/maps?cid=6389810841970518092",
@@ -74,7 +76,7 @@ export const localBusinessJsonLd = {
   telephone: PHONE,
   logo: `${SITE_URL}/logos/logo_vertical.png`,
   image: `${SITE_URL}${OG_IMAGE.url}`,
-  founder: { "@type": "Person", name: "Saken Sawyer" },
+  founder: { "@type": "Person", name: "Saken Sawyer", sameAs: FOUNDER_LINKEDIN },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Tyler",
