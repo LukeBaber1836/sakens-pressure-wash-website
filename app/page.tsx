@@ -1,5 +1,6 @@
 import { FinalCta } from "./components/final-cta";
 import { Hero } from "./components/hero";
+import { LogoWall } from "./components/logo-wall";
 import { HowItWorks } from "./components/how-it-works";
 import { MeetTheOwner } from "./components/meet-the-owner";
 import { MissionStatement } from "./components/mission-statement";
@@ -17,6 +18,7 @@ export default function Home() {
       <main className="flex flex-1 flex-col">
         <Hero />
         <MeetTheOwner />
+        <LogoWall className="mt-16 sm:mt-20" />
         <ServicesBreakdown />
         <HowItWorks />
         <WorkGallery />

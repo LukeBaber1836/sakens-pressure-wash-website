@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { LogoWall } from "../components/logo-wall";
 import { Reviews } from "../components/reviews";
 import { ServiceArea } from "../components/service-area";
 import { SiteFooter } from "../components/site-footer";
@@ -19,6 +20,7 @@ export default function ReviewsPage() {
       <SiteNav />
       <main className="flex flex-1 flex-col">
         <Reviews lead />
+        <LogoWall className="mt-16 sm:mt-20" />
         <Accreditations />
         <ServiceArea />
       </main>
