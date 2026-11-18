@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FocusEvent } from "react";
+import { useEffect, useRef, useState, type FocusEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import posthog from "posthog-js";
@@ -80,7 +80,22 @@ export function ServicesScene({
 
   const close = (id: string) =>
     setActive((current) => (current === id ? null : current));
+  const toggle = (id: string) =>
+    setActive((current) => (current === id ? null : id));
   const ranks = scatteredRanks(services.length);
+
+  // A tap anywhere outside the open hotspot (its dot and card) closes it. Touch never fires the hover
+  // or blur that closes cards on desktop (iOS doesn't focus buttons on tap), so this is the way out.
+  useEffect(() => {
+    if (!active) return;
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Element | null;
+      if (target?.closest(`[data-hotspot="${active}"]`)) return;
+      setActive(null);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [active]);
 
   return (
     <MotionConfig transition={pop} reducedMotion="user">
@@ -126,6 +141,7 @@ export function ServicesScene({
             open={active === service.id}
             onOpen={() => setActive(service.id)}
             onClose={() => close(service.id)}
+            onToggle={() => toggle(service.id)}
             link={cardLinks[linkTo](service.id)}
             onEstimateStart={
               linkTo === "estimate"
@@ -199,6 +215,7 @@ function Hotspot({
   open,
   onOpen,
   onClose,
+  onToggle,
   link,
   onEstimateStart,
 }: {
@@ -208,8 +225,12 @@ function Hotspot({
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
+  onToggle: () => void;
   onEstimateStart?: () => void;
 }) {
+  // How the dot was last pressed. Touch and pen taps toggle the card; a mouse has already opened it
+  // on hover, and keyboard activation should only ever open it.
+  const pressedWith = useRef<string | null>(null);
   const panelId = `service-${service.id}`;
   const below = service.y < 35;
   const align =
@@ -225,6 +246,7 @@ function Hotspot({
 
   return (
     <div
+      data-hotspot={service.id}
       style={{ left: `${service.x}%`, top: `${service.y}%` }}
       className={cn(
         "absolute -translate-x-1/2 -translate-y-1/2",
@@ -232,7 +254,8 @@ function Hotspot({
       )}
       onPointerEnter={(e) => e.pointerType === "mouse" && onOpen()}
       onPointerLeave={(e) => e.pointerType === "mouse" && onClose()}
-      onFocus={onOpen}
+      // Keyboard focus opens the card. Focus from a tap is ignored, so it can't undo a tap that closed it.
+      onFocus={(e) => e.target.matches(":focus-visible") && onOpen()}
       onBlur={handleBlur}
       onKeyDown={(e) => e.key === "Escape" && onClose()}
     >
@@ -248,7 +271,14 @@ function Hotspot({
           aria-expanded={open}
           aria-controls={panelId}
           aria-label={service.name}
-          onClick={onOpen}
+          onPointerDown={(e) => (pressedWith.current = e.pointerType)}
+          onClick={() => {
+            const viaTouch =
+              pressedWith.current === "touch" || pressedWith.current === "pen";
+            pressedWith.current = null;
+            if (viaTouch) onToggle();
+            else onOpen();
+          }}
           className="relative grid size-9 place-items-center rounded-full outline-none"
         >
           <motion.span
