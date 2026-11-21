@@ -52,8 +52,8 @@ const steps: Step[] = [
     text: "Call or send us a message. Saken comes out, looks over the property, and gives you a free, honest price.",
     Icon: FilePenIcon,
     image: {
-      src: "/images/how-it-works-quote-04.png",
-      alt: "Illustration of a worker in a cap standing in front of a large stone home, writing a quote on his clipboard",
+      src: "/images/how-it-works-quote-05.png",
+      alt: "Illustration of a worker in an orange Saken's shirt, blue cap and jeans standing in front of a large stone home, writing a quote on his clipboard",
       width: 1264,
       height: 627,
     },
@@ -74,8 +74,8 @@ const steps: Step[] = [
     text: "We show up on time, wash everything top to bottom, and walk the property with you when we're done.",
     Icon: SparklesIcon,
     image: {
-      src: "/images/how-it-works-clean-05.png",
-      alt: "Illustration of two workers washing a large stone home, one pressure washing the driveway and one soft washing the stone wall",
+      src: "/images/how-it-works-clean-06.png",
+      alt: "Illustration of two workers in orange shirts, blue caps and jeans washing a large stone home, one pressure washing the driveway and one soft washing the stone wall",
       width: 1264,
       height: 627,
     },

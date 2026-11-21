@@ -87,6 +87,13 @@ export function LogoWall({ className }: { className?: string }) {
               </motion.li>
             ))}
           </ul>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-6 text-center font-heading text-sm font-bold tracking-[0.12em] text-foreground/55 uppercase sm:mt-8 2xl:text-base"
+          >
+            And many more!
+          </motion.p>
         </motion.div>
       </section>
     </MotionConfig>

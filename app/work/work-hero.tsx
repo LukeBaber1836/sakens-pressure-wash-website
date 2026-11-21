@@ -80,7 +80,7 @@ export function WorkHero({ photoCount }: { photoCount: number }) {
         >
           {/* The video's first frame, preloaded, showing through until the video can play. */}
           <Image
-            src="/images/roof-wash-brick-ranch-poster.webp"
+            src="/images/roof-360-poster.webp"
             alt=""
             fill
             preload
@@ -89,7 +89,7 @@ export function WorkHero({ photoCount }: { photoCount: number }) {
           />
           <video
             className="absolute inset-0 h-full w-full object-cover"
-            src="/videos/roof_wash_brick_ranch_with_truck_and_trailer_rig.webm"
+            src="/videos/roof_360.webm"
             autoPlay
             muted
             loop

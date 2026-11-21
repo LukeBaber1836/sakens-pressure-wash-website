@@ -27,18 +27,18 @@ const photos = [
   },
   {
     src: "/images/crew-stone-house-01.jpeg",
-    alt: "Crew member washing the stone exterior of a house with an extension wand",
-    title: "Stone exterior",
+    alt: "Crew member washing the upstairs windows of a stone house with an extension pole",
+    title: "Window washing",
   },
   {
-    src: "/images/covered-patio-clean-01.jpeg",
-    alt: "Covered patio mid-wash, with the cleaned concrete next to the dirty section",
-    title: "Covered patio",
+    src: "/images/stadium-bleachers-night-01.jpeg",
+    alt: "Crew member pressure washing stadium bleachers at night under the field lights",
+    title: "Stadium bleachers",
   },
   {
-    src: "/images/pool-deck-steps-01.jpeg",
-    alt: "Bright, clean pool deck and steps around a backyard pool",
-    title: "Pool deck",
+    src: "/images/church-facade-roof-01.jpeg",
+    alt: "Church facade with a tall gabled window, seen from the rooftop mid-wash with the hose and surface cleaner",
+    title: "Church facade",
   },
   {
     src: "/images/glass-storefront-01.jpeg",
@@ -46,9 +46,9 @@ const photos = [
     title: "Storefront glass",
   },
   {
-    src: "/images/concrete-spw-logo-clean-01.jpeg",
-    alt: "The letters SPW pressure washed into a dirty concrete slab",
-    title: "Concrete cleaning",
+    src: "/images/driveway-wet-01.jpeg",
+    alt: "Long, freshly washed concrete driveway leading up to a white brick house under tall trees",
+    title: "Driveway cleaning",
   },
 ];
 

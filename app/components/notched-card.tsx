@@ -88,6 +88,8 @@ export function NotchedCard({
   // reveal animation can redraw every frame without re-rendering.
   const openRef = useRef(notchOpen ? 1 : 0);
   const redrawRef = useRef(() => {});
+  // True while the notch is opening or closing.
+  const animatingRef = useRef(false);
   // A card that starts with the notch closed is just a rounded rectangle, which CSS alone draws, so it
   // can show from the first paint; only a card that starts notched waits for its clip path.
   const [startsNotched] = useState(notchOpen);
@@ -99,33 +101,51 @@ export function NotchedCard({
     const root = rootRef.current;
     if (!card || !item || !shadow || !root) return;
 
+    // Sizes are measured only when something resizes. Reading them on every animation frame, right
+    // after writing the item's transform, forced a fresh layout each frame and made phones stutter.
+    const size = { w: 0, h: 0, itemW: 0, itemH: 0 };
+    const measure = () => {
+      size.w = card.offsetWidth;
+      size.h = card.offsetHeight;
+      size.itemW = item.offsetWidth;
+      size.itemH = item.offsetHeight;
+    };
+    const shadowPath = shadow.querySelector("path");
+
     const update = () => {
       const open = openRef.current;
-      const w = card.offsetWidth;
-      const h = card.offsetHeight;
-      const fullNh = item.offsetHeight + GAP;
+      const { w, h, itemW, itemH } = size;
+      const fullNh = itemH + GAP;
       const nh = fullNh * open;
       // A full-width item would leave only a thin lip beside it, so end the card above the item instead.
       const path =
-        item.offsetWidth >= w
+        itemW >= w
           ? roundedRectPath(w, h - nh)
-          : notchedPath(w, h, item.offsetWidth + GAP, nh);
+          : notchedPath(w, h, itemW + GAP, nh);
       // The item rides up with the notch's top edge.
       item.style.transform = open < 1 ? `translateY(${fullNh - nh}px)` : "";
       item.style.opacity = open < 1 ? String(open) : "";
       // A clip path rather than an SVG mask image: mobile browsers decode each new mask image
       // asynchronously and hide the card until it's ready, so redrawing one every frame flickered.
       card.style.clipPath = `path("${path}")`;
-      shadow.setAttribute("viewBox", `0 0 ${w} ${h}`);
-      shadow.querySelector("path")?.setAttribute("d", path);
+      // The inset shadow's 40px blur is costly to redraw, so it's left alone mid-animation (it's faded
+      // out then) and redrawn once the notch comes to rest.
+      if (!animatingRef.current) {
+        shadow.setAttribute("viewBox", `0 0 ${w} ${h}`);
+        shadowPath?.setAttribute("d", path);
+      }
       // Reveal only once the notch is cut, so the first paint never shows a plain rectangle.
       root.dataset.ready = "";
     };
 
     redrawRef.current = update;
     // Cut the notch before the first paint rather than waiting on the observer's initial callback.
+    measure();
     update();
-    const observer = new ResizeObserver(update);
+    const observer = new ResizeObserver(() => {
+      measure();
+      update();
+    });
     observer.observe(card);
     observer.observe(item);
     return () => observer.disconnect();
@@ -134,6 +154,14 @@ export function NotchedCard({
   useEffect(() => {
     const target = notchOpen ? 1 : 0;
     if (openRef.current === target) return;
+    const root = rootRef.current;
+    const settle = () => {
+      animatingRef.current = false;
+      redrawRef.current();
+      if (root) delete root.dataset.moving;
+    };
+    animatingRef.current = true;
+    if (root) root.dataset.moving = "";
     const controls = animate(openRef.current, target, {
       duration: 0.6,
       ease: [0.22, 1, 0.36, 1],
@@ -141,8 +169,12 @@ export function NotchedCard({
         openRef.current = v;
         redrawRef.current();
       },
+      onComplete: settle,
     });
-    return () => controls.stop();
+    return () => {
+      controls.stop();
+      settle();
+    };
   }, [notchOpen]);
 
   return (
@@ -174,7 +206,7 @@ export function NotchedCard({
           ref={shadowRef}
           aria-hidden="true"
           preserveAspectRatio="none"
-          className="pointer-events-none absolute inset-0 size-full will-change-transform"
+          className="pointer-events-none absolute inset-0 size-full transition-opacity duration-300 ease-out will-change-transform group-data-moving/notch:opacity-0 group-data-moving/notch:duration-150 motion-reduce:transition-none"
         >
           <filter
             id={shadowFilterId}
@@ -212,7 +244,7 @@ export function NotchedCard({
       <div
         ref={notchRef}
         // Kept out of sight until the card has measured it and tucked it into place.
-        className="invisible absolute inset-x-0 bottom-0 group-data-ready/notch:visible md:right-auto md:max-w-[calc(100%-4.5rem)]"
+        className="invisible absolute inset-x-0 bottom-0 group-data-ready/notch:visible group-data-moving/notch:will-change-transform md:right-auto md:max-w-[calc(100%-4.5rem)]"
       >
         {notch}
       </div>
